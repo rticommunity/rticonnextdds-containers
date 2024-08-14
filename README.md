@@ -1,4 +1,4 @@
-# RTI Connext DDS Containers Documentation
+# RTI Connext Containers Documentation
 
 Welcome to the official repository for [RTI Connext Container images](https://hub.docker.com/u/rticom). This repository contains the documentation for all available Docker images and their respective tags.
 
