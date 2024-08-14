@@ -15,4 +15,4 @@ You can find the documentation for a specific image and version by navigating to
 ### Quick Links
 
 - **DockerHub Repository**: [RTI Community on DockerHub](https://hub.docker.com/u/rticom)
-- **Connext DDS Documentation**: [RTI Documentation Portal](https://community.rti.com/documentation)
+- **RTI Connext Documentation**: [RTI Documentation Portal](https://community.rti.com/documentation)
