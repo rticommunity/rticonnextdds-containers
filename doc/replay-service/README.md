@@ -1,6 +1,6 @@
 Welcome to *RTI® Replay Service*, an *RTI Connext®* application that replays DDS *Topics* and discovery data previously recorded by the *RTI Recording Service*.
 
-For additional information on *RTI Replay Service*, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/services/recording_service/replay/replay_index.html).
+For additional information on *RTI Replay Service*, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/connext_dds_professional/services/recording_service/replay/replay_index.html).
 
 The documentation shown on this page applies to the *Replay Service* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
 
@@ -11,18 +11,18 @@ Running *Replay Service* on Docker is as simple as running the ``docker run`` co
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName default
 ```
 
-This command starts *Replay Service* with an example configuration that replays a record that should be in the database files located in  ```/home/rtiuser/rti_workspace/7.3.0/database/```. The following sections explain the different ways to provide the database files.
+This command starts *Replay Service* with an example configuration that replays a record that should be in the database files located in  ```/home/rtiuser/rti_workspace/7.4.0/database/```. The following sections explain the different ways to provide the database files.
 
 To run *Replay Service*, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat
+-v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat
 ```
 
 The *Replay Service* container image uses the following user and group:
@@ -32,14 +32,14 @@ The *Replay Service* container image uses the following user and group:
 
 The *Replay Service* container image uses the following working directory:
 
-* ```/home/rtiuser/rti_workspace/7.3.0/user_config/replay_service```
+* ```/home/rtiuser/rti_workspace/7.4.0/user_config/replay_service```
 
 ## Built-in configuration
 
 Use the following command to retrieve the *Replay Service* built-in configuration file:
 
 ```
-docker cp replay_service:/opt/rti.com/rti_connext_dds-7.3.0/resource/xml/RTI_REPLAY_SERVICE.xml .
+docker cp replay_service:/opt/rti.com/rti_connext_dds-7.4.0/resource/xml/RTI_REPLAY_SERVICE.xml .
 ```
 
 The built-in configuration supports the following execution mode:
@@ -53,7 +53,7 @@ To select an execution mode, pass the ``-cfgName`` parameter with the desired co
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName default
@@ -73,7 +73,7 @@ using environment variables:
 
 ### Database files storage using default storage directory
 
-The default configuration takes the database files from ```/home/rtiuser/rti_workspace/7.3.0/database/cdr_recording```. Take into account that the database files are not in the container’s filesystem. To test this image, you can use the *RTI Recording Service* Docker image to record some data, and then use the *RTI Replay Service* image to replay it.
+The default configuration takes the database files from ```/home/rtiuser/rti_workspace/7.4.0/database/cdr_recording```. Take into account that the database files are not in the container’s filesystem. To test this image, you can use the *RTI Recording Service* Docker image to record some data, and then use the *RTI Replay Service* image to replay it.
 
 You can use the following two options to provide the database files:
 * bind-mount a directory from the host to the database directory
@@ -86,8 +86,8 @@ The second option is recommended for persisting the database files across contai
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        --mount type=volume,source=recording_service_database,target=/home/rtiuser/rti_workspace/7.3.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        --mount type=volume,source=recording_service_database,target=/home/rtiuser/rti_workspace/7.4.0/database \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName default
@@ -100,8 +100,8 @@ The ``recording_service_database`` volume should contain the database files in X
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/recording_service_database:/home/rtiuser/rti_workspace/7.3.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/recording_service_database:/home/rtiuser/rti_workspace/7.4.0/database \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName default
@@ -146,7 +146,7 @@ sudo chown -R 1000:1000 /var/lib/docker/volumes/recording_service_database/_data
    ```
    docker run -dt \
            --network host \
-           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
            --mount type=volume,source=recording_service_database,target=/home/rtiuser/database \
            -e DATABASE_DIR=/home/rtiuser/database/cdr_recording \
            --name=replay_service \
@@ -159,7 +159,7 @@ sudo chown -R 1000:1000 /var/lib/docker/volumes/recording_service_database/_data
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         -v $PWD/recording_service_database:/home/rtiuser/database \
         -e DATABASE=/home/rtiuser/database/cdr_recording \
         --name=replay_service \
@@ -206,7 +206,7 @@ sudo chown -R 1000:1000 /var/lib/docker/volumes/recording_service_database/_data
 To provide your own configuration, follow these steps when running the container:
 
 * bind-mount your configuration file (for example, MyReplayService.xml) from the host into the following location in the Docker container: 
-```/home/rtiuser/rti_workspace/7.3.0/user_config/replay_service/USER_REPLAY_SERVICE.xml```
+```/home/rtiuser/rti_workspace/7.4.0/user_config/replay_service/USER_REPLAY_SERVICE.xml```
 * select the *Replay Service* configuration in the configuration file by adding the ``-cfgName`` parameter with the name of your selected configuration
 
 For example:
@@ -214,8 +214,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyReplayService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/replay_service/USER_REPLAY_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyReplayService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/replay_service/USER_REPLAY_SERVICE.xml \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName MyReplayService
@@ -228,8 +228,8 @@ To provide your command-line parameters to *Replay Service*, add them to the end
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyReplayService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/replay_service/USER_REPLAY_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyReplayService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/replay_service/USER_REPLAY_SERVICE.xml \
         --name=replay_service \
         rticom/replay-service:latest \
         -cfgName MyReplayService \
@@ -250,7 +250,7 @@ The previous examples use the ``--network host`` parameter to run the containers
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use RTI Real-Time WAN Transport and expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use RTI Real-Time WAN Transport and expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 This image does not provide built-in configuration for *RTI Real-Time WAN Transport*. If you want to use it, you will need to provide your own configuration file.
 
@@ -271,7 +271,7 @@ Additional third party information can be found at https://community.rti.com/doc
 Use the following command to retrieve the *RTI_License_Agreement.pdf* built-in file:
 
 ```
-docker cp replay_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agreement.pdf .
+docker cp replay_service:/opt/rti.com/rti_connext_dds-7.4.0/RTI_License_Agreement.pdf .
 ```
 
 ## How to get a license file

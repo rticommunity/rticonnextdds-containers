@@ -1,6 +1,6 @@
 Welcome to *RTI® Web Integration Service*, an *RTI Connext®* out-of-the-box solution for integrating web-based applications and services with *RTI Connext*.
 
-For additional information on *RTI Web Integration Service*, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/services/web_integration_service/index.html).
+For additional information on *RTI Web Integration Service*, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/connext_dds_professional/services/web_integration_service/index.html).
 
 The documentation shown on this page applies to the *Web Integration Service* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
 
@@ -11,11 +11,11 @@ Running *Web Integration Service* on Docker is as simple as running the ``docker
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         --name=web_integration_service \
         rticom/web-integration-service:latest \
         -cfgName shapesDemoTutorial \
-        -documentRoot /home/rtiuser/rti_workspace/7.3.0/examples/web_integration_service
+        -documentRoot /home/rtiuser/rti_workspace/7.4.0/examples/web_integration_service
 ```
 
 This command starts an instance of *Web Integration Service* in [localhost](http://localhost:8080). By default, *Web Integration Service* listens for HTTP requests on port 8080.
@@ -23,7 +23,7 @@ This command starts an instance of *Web Integration Service* in [localhost](http
 To run *Web Integration Service*, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat
+-v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat
 ```
 
 The *Web Integration Service* container image uses the following user and group:
@@ -33,14 +33,14 @@ The *Web Integration Service* container image uses the following user and group:
 
 The *Web Integration Service* container image uses the following working directory:
 
-* ```/home/rtiuser/rti_workspace/7.3.0/user_config/web_integration_service```
+* ```/home/rtiuser/rti_workspace/7.4.0/user_config/web_integration_service```
 
 ## Built-in configuration
 
 Use the following command to retrieve the *Web Integration Service* built-in configuration file:
 
 ```
-docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.3.0/resource/xml/RTI_WEB_INTEGRATION_SERVICE.xml
+docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.4.0/resource/xml/RTI_WEB_INTEGRATION_SERVICE.xml
 ```
 
 The built-in configuration provides the following execution mode:
@@ -55,7 +55,7 @@ To provide your own configuration, follow these steps when running the container
 
 * bind-mount your configuration file (for example, MyWebIntegrationService.xml) from the host 
 into the following location in the Docker container: 
-```/home/rtiuser/rti_workspace/7.3.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml```
+```/home/rtiuser/rti_workspace/7.4.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml```
 * select the *Web Integration Service* configuration in the configuration file by adding the ``-cfgName``
 parameter with the name of your selected configuration
 
@@ -64,8 +64,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
         --name=web_integration_service \
         rticom/web-integration-service:latest \
         -cfgName MyWebIntegrationService
@@ -79,8 +79,8 @@ them to the end of the ``docker run`` command. For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
         --name=web_integration_service \
         rticom/web-integration-service:latest \
         -cfgName MyWebIntegrationService \
@@ -101,7 +101,7 @@ The previous examples use the ``--network host`` parameter to run the containers
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you  want to make the containers accessible from outside the Docker environment without using the host network, you can expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you  want to make the containers accessible from outside the Docker environment without using the host network, you can expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 ## Release Notes
 
@@ -120,7 +120,7 @@ Additional third party information can be found at https://community.rti.com/doc
 Use the following command to retrieve the *RTI_License_Agreement.pdf* built-in file:
 
 ```
-docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agreement.pdf .
+docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.4.0/RTI_License_Agreement.pdf .
 ```
 
 ## How to get a license file
