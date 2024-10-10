@@ -3,7 +3,7 @@
 (metrics and logs) from *Connext* applications and stores this data in third-party 
 observability backends.
 
-In the *Connext* 7.3.0 release, *Collector Service* provides native integration
+*Collector Service* provides native integration
 with Prometheus®, as the time-series database to store Connext metrics, and Grafana® 
 Loki™, as the log aggregation system to store Connext logs. Integration with other 
 backends is possible using 
@@ -11,7 +11,7 @@ backends is possible using
 [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
 
 For additional information on *RTI Connext Observability Framework*, see the 
-[RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/index.html#).
+[RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/addon_products/observability/index.html#).
 
 The documentation shown on this page applies to the *Collector Service* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
 
@@ -22,14 +22,14 @@ Running *Collector Service* on Docker is as simple as running the ``docker run``
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         --name=collector_service \
         rticom/collector-service:latest
 ```
 
 The above command starts *Collector Service* with a default configuration 
 that stores the metrics and logs emitted by *Connext* applications using 
-[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/library.html)
+[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/addon_products/observability/library.html)
 on domain ID 2 into Prometheus (for metrics) and Grafana Loki (for logs) 
 databases .
 
@@ -42,7 +42,7 @@ container. Bind-mount your license from the host by using the following
 command-line parameter:
 
 ```
--v /path/to/your_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat
+-v /path/to/your_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat
 ```
 
 The *Collector Service* container image uses the following user and group:
@@ -52,7 +52,7 @@ The *Collector Service* container image uses the following user and group:
 
 The *Collector Service* container image uses the following working directory:
 
-* ```/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service```
+* ```/home/rtiuser/rti_workspace/7.4.0/user_config/collector_service```
 
 The following table indicates the RTI licenses required based on your answers 
 to the questions in the first two columns.
@@ -69,7 +69,7 @@ to the questions in the first two columns.
 The built-in configuration file used by *Collector Service* can be retrieved using the following command:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/resource/xml/RTI_COLLECTOR_SERVICE.xml .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.4.0/resource/xml/RTI_COLLECTOR_SERVICE.xml .
 ```
 The built-in configuration supports the following execution modes:
 
@@ -101,7 +101,7 @@ mode, set the environment variable ``CFG_NAME`` to *SecureLAN*.
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         -e CFG_NAME="SecureLAN" \
         --name=collector_service \
         rticom/collector-service:latest
@@ -172,7 +172,7 @@ follows:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
         -e CFG_NAME="NonSecureWAN" \
         -e OBSERVABILITY_DOMAIN=33 \
         -e OBSERVABILITY_RWT_PUBLIC_ADDRESS=10.10.1.34 \
@@ -208,7 +208,7 @@ Service*.
 * *permissions.p7s* must contain the permissions file of the *Collector Service*.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
 
 **To configure HTTPS + Basic Authentication:**
 
@@ -255,7 +255,7 @@ files listed above. For example, if you are not running OpenTelemetry Collector,
 you do not need to provide *rootCAOtel.crt*.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
 
 ## Custom configuration
 
@@ -268,7 +268,7 @@ To provide your own configuration, follow these steps when running the container
 
 * bind-mount your configuration file (for example, MyCollectorService.xml) from the host 
 into the following location in the Docker container: 
-```/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml```
+```/home/rtiuser/rti_workspace/7.4.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml```
 * select the *Collector Service* configuration in the configuration file by 
 setting the ``CFG_NAME`` environment variable
 
@@ -277,8 +277,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
         -e CFG_NAME="MyCollectorService" \
         --name=collector_service \
         rticom/collector-service:latest
@@ -292,8 +292,8 @@ them to the end of the ``docker run`` command. For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.4.0/rti_license.dat \
+        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.4.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
         -e CFG_NAME="MyCollectorService" \
         --name=collector_service \
         rticom/collector-service:latest \
@@ -316,7 +316,7 @@ The previous examples use the ``--network host`` parameter to run the containers
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use RTI Real-Time WAN Transport and expose the necessary UDP ports using the `-p` option. For more information on RTI Real-Time WAN Transport, refer to the [RTI Real-Time WAN Transport documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use RTI Real-Time WAN Transport and expose the necessary UDP ports using the `-p` option. For more information on RTI Real-Time WAN Transport, refer to the [RTI Real-Time WAN Transport documentation](https://community.rti.com/static/documentation/connext-dds/7.4.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 The following built-in configuration modes use the RTI Real-Time WAN Transport:
 * SecureWAN
@@ -341,7 +341,7 @@ Additional third party information can be found at https://community.rti.com/doc
 Use the following command to retrieve the *RTI_License_Agreement.pdf* built-in file:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agreement.pdf .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.4.0/RTI_License_Agreement.pdf .
 ```
 
 ## How to get a license file
