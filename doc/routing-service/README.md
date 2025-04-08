@@ -171,16 +171,17 @@ docker cp routing_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agreeme
 
 ## How to get a license file
 
-For an RTI Connext free trial, visit the following link: https://www.rti.com/free-trial/connext. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+An RTI license file is always required to run Connext SDK in a Docker container.
 
-If you are an RTI customer, and you need a license file, please contact [RTI support](https://www.rti.com/support).
+### Existing customers
 
-* RTI Connext Professional
-* RTI Security Plugins
-* RTI Real-Time WAN Transport
-* RTI Cloud Discovery Service
+If you are an RTI customer, and you need an RTI Connext license file, contact [RTI support](https://www.rti.com/support). 
 
-All the activation keys are included in the same license file.
+### Evaluators
+
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.5.0 or higher. With the free trial you will receive a limited-time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+
+To get a free trial license for earlier releases, contact evaluations@rti.com.
 
 ### RTI Supplemental License
 
