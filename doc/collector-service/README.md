@@ -291,13 +291,17 @@ docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agree
 
 ## How to get a license file
 
-An RTI license file is always required to run *Collector Service* in a Docker container.
+An RTI license file is always required to run Connext SDK in a Docker container.
 
 ### Existing customers
-If you are an RTI customer, and you need an RTI Connext 7.2.0 license file, contact RTI support.
+
+If you are an RTI customer, and you need an RTI Connext license file, contact [RTI support](https://www.rti.com/support). 
 
 ### Evaluators
-If you are not an RTI customer, contact evaluations@rti.com for an RTI Connext 7.2.0 free trial. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.5.0 or higher. With the free trial you will receive a limited-time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+
+To get a free trial license for earlier releases, contact evaluations@rti.com.
 
 ### RTI Supplemental License
 
