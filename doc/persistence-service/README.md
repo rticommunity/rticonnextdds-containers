@@ -252,7 +252,7 @@ docker cp persistence_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agr
 
 ## How to get a license file
 
-An RTI license file is always required to run Connext SDK in a Docker container.
+An RTI license file is always required to run Persistence Service in a Docker container.
 
 ### Existing customers
 
