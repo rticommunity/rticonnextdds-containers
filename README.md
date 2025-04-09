@@ -10,7 +10,7 @@ Each container image provided by RTI is designed to help you quickly and efficie
 
 You can find the documentation for a specific image and version by navigating to the appropriate directory under the `doc/` folder.
 
-> **Note:** The documentation shown on DockerHub and in the `main` branch of this repository refers to the `latest` tag for each image, which corresponds to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the appropriate tag in this repository.
+> **Note:** The documentation shown on DockerHub and in the `main` branch of this repository refers to the `latest` tag for each image, which corresponds to the most recent image released by RTI. For specific tag documentation, refer to the appropriate tag in this repository.
 
 ### Quick Links
 
