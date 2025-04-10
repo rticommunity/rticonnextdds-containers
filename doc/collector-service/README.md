@@ -1,328 +1,24 @@
-*RTI® Observability Collector Service* is a component of the 
-*RTI Connext® Observability Framework*, a solution that scalably collects telemetry data 
-(metrics and logs) from *Connext* applications and stores this data in third-party 
-observability backends.
+*RTI® Observability Collector Service* is a component of the
+*RTI Connext® Observability Framework*, a solution that scalably collects telemetry data
+from *RTI Connext* applications and distributes this data to third-party observability backends
+or *RTI Admin Console*. 
 
-In the *Connext* 7.3.0 release, *Collector Service* provides native integration
-with Prometheus®, as the time-series database to store Connext metrics, and Grafana® 
-Loki™, as the log aggregation system to store Connext logs. Integration with other 
-backends is possible using 
-[OpenTelemetry™](https://opentelemetry.io/) and the 
-[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
+For metrics, logs, and security events *Collector Service* provides native integration
+with Prometheus®, as the time-series database to store *Connext* metrics, and Grafana® Loki™,
+as the log aggregation system to store *Connext* logs. Integration with other backends is
+possible using [OpenTelemetry™](https://opentelemetry.io/) and the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
+For additional information on *RTI Connext Observability Framework*, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.5.0/doc/manuals/addon_products/observability/index.html#).
 
-For additional information on *RTI Connext Observability Framework*, see the 
-[RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/index.html#).
-
-The documentation shown on this page applies to the *Collector Service* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
+*Collector Service* also collects non-metric data (configuration and discovery data) that is
+currently consumed by *Admin Console* to support the remote debugging feature. For additional information on remote debugging with *Admin Console* see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.5.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
 
 ## Using the Collector Service container image
 
-Running *Collector Service* on Docker is as simple as running the ``docker run`` command:
-
-```
-docker run -dt \
-        --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        --name=collector_service \
-        rticom/collector-service:latest
-```
-
-The above command starts *Collector Service* with a default configuration 
-that stores the metrics and logs emitted by *Connext* applications using 
-[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/library.html)
-on domain ID 2 into Prometheus (for metrics) and Grafana Loki (for logs) 
-databases .
-
-With the default configuration, *Collector Service* runs a Prometheus client that 
-spawns an HTTP server on port 19090 and a Grafana Loki HTTP client that connects 
-to a Grafana Loki server running on port 3100.
-
-An RTI license file is always required to run *Collector Service* in a Docker 
-container. Bind-mount your license from the host by using the following 
-command-line parameter:
-
-```
--v /path/to/your_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat
-```
-
-The *Collector Service* container image uses the following user and group:
-
-* User: rtiuser (1000)
-* Group: rtigroup (1000)
-
-The *Collector Service* container image uses the following working directory:
-
-* ```/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service```
-
-The following table indicates the RTI licenses required based on your answers 
-to the questions in the first two columns.
-
-|Do you need to secure telemetry data exchanged between applications and *Collector Service* using *RTI Security Plugins*?|Do you need to send telemetry data to *Collector Service* over the WAN using *RTI Real-Time WAN Transport*?|Required License|
-|-------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|----------------|
-|NO|NO|Connext Professional|
-|YES|NO|Connext Professional and Security Plugins|
-|YES|YES|Connext Professional, Security Plugins, Cloud Discovery Service, and Real-Time WAN Transport|
-|NO|YES|Connext Professional, Cloud Discovery Service, and Real-Time WAN Transport|
-
-## Built-in configuration
-
-The built-in configuration file used by *Collector Service* can be retrieved using the following command:
-
-```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/resource/xml/RTI_COLLECTOR_SERVICE.xml .
-```
-The built-in configuration supports the following execution modes:
-
-|Configuration Name|Network|Data Storage|Security|
-|------------------|-------|------------|--------|
-|NonSecureLAN|LAN|Prometheus and Grafana Loki|No|
-|NonSecureWAN|WAN|Prometheus and Grafana Loki|No|
-|SecureLAN|LAN|Prometheus and Grafana Loki|Yes|
-|SecureWAN|WAN|Prometheus and Grafana Loki|Yes|
-|NonSecureOTelLAN|LAN|Multiple through OpenTelemetry Collector|No|
-|NonSecureOTelWAN|WAN|Multiple through OpenTelemetry Collector|No|
-|SecureOTelLAN|LAN|Multiple through OpenTelemetry Collector|Yes|
-|SecureOTelWAN|WAN|Multiple through OpenTelemetry Collector|Yes|
-
-In LAN modes, *Collector Service* uses *UDPv4* and *SHMEM* Transports to 
-receive telemetry data from *Connext* applications and runs on the same LAN 
-where the applications run.
-
-In WAN modes, *Collector Service* uses *RTI Real-Time WAN Transport* to 
-receive telemetry data from *Connext* applications and runs on a WAN. For 
-example, *Collector Service* may run in an AWS instance while the 
-*Connext* applications may run on-premise.
-
-The default execution mode is *NonSecureLAN*. To select a different execution 
-mode, set the environment variable ``CFG_NAME`` to the name of the configuration 
-file you want to use. For example, to run *Collector Service* in *SecureLAN*
-mode, set the environment variable ``CFG_NAME`` to *SecureLAN*.
-
-```
-docker run -dt \
-        --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -e CFG_NAME="SecureLAN" \
-        --name=collector_service \
-        rticom/collector-service:latest
-```
-
-In all modes, the built-in configuration assumes that the following components
-are running on the same host where *Collector Service* runs: 
-* Prometheus server
-* Grafana Loki server
-* OpenTelemetry Collector
-
-In addition to the configuration name, there are other parameters you can 
-set using environment variables when running the Docker container:
-
-**General Parameters**
-
-```
--e OBSERVABILITY_DOMAIN=<The domain ID in which Collector Service receives the telemetry data from Connext applications. default: 2>
--e OBSERVABILITY_CONTROL_PORT=<The private TCP port to access the Collector Service control server for external commands. This is the port the service listens to. default: 19098>
--e OBSERVABILITY_CONTROL_PUBLIC_HOSTNAME=<The public hostname to access the Collector Service control server from a public network. default: localhost>
--e OBSERVABILITY_CONTROL_PUBLIC_PORT=<The public TCP port to access the Collector Service control server from a public network. default: localhost>
-```
-
-**Security Paramaters**
-
-```
--e OBSERVABILITY_BASIC_AUTH_USERNAME=<The username to authenticate the HTTP connections (client) created by Collector Service. default: user>
--e OBSERVABILITY_BASIC_AUTH_PASSWORD=<The password to authenticate the HTTP connections (client) created by Collector Service. default: userpassword>
-```
-
-The above parameters are used by the HTTP clients created by 
-*Collector Service* to send telemetry data to third-party backends (for example,
-Prometheus, Grafana Loki, and OpenTelemetry Collector).
-
-**WAN Parameters**
-
-```
--e OBSERVABILITY_RWT_PORT=<Both the the private and public UDP port of Collector Service in which it will receive telemetry data from Connext applications  using Real-Time WAN Transport. default: 30000>
--e OBSERVABILITY_RWT_PUBLIC_ADDRESS=<The public address of Collector Service in which it will receive telemetry data from Connext applications using Real-Time WAN Transport. default: localhost>
-```
-
-**OpenTelemetry Parameters**
-
-```
--e OBSERVABILITY_OTEL_HOSTNAME=<The hostname where the OpenTelemetry Collector runs. default: localhost>
--e OBSERVABILITY_OTEL_METRIC_EXPORTER_PORT=<The TCP port of the OpenTelemetry Collector in which it will receive metrics from Collector Service using OTLP protocol. This is the port that the OpenTelemetry Collector listens to. default: 4318>
--e OBSERVABILITY_OTEL_LOG_EXPORTER_PORT=<The TCP port of the OpenTelemetry Collector in which it will receive logs from Collector Service using OTLP protocol. This is the port that the OpenTelemetry Collector listens to. default: 4319>
-```
-
-**Prometheus Parameters**
-
-```
--e OBSERVABILITY_PROMETHEUS_EXPORTER_PORT=<The TCP port of the Prometheus endpoint for exporting telemetry data to Prometheus. This is the port that the Prometheus endpoint service listens to and uses to provide telemetry data via scrapes from the Prometheus server. default: 19090>
-```
-
-**Grafana Loki Parameters**
-
-```
--e OBSERVABILITY_LOKI_HOSTNAME=<The hostname where the Loki server runs, default: localhost>
--e OBSERVABILITY_LOKI_EXPORTER_PORT=<The TCP port of the Grafana Loki server in which it will receive logs from Collector Service. default: 3100>
-```
-
-For example, to run a *Collector Service* instance with public address 
-10.10.1.34:16000 that collects all telemetry data published by *Connext* 
-applications over the WAN on domain 33, you can run a Docker container as 
-follows:
-
-```
-docker run -dt \
-        --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -e CFG_NAME="NonSecureWAN" \
-        -e OBSERVABILITY_DOMAIN=33 \
-        -e OBSERVABILITY_RWT_PUBLIC_ADDRESS=10.10.1.34 \
-        -e OBSERVABILITY_RWT_PORT=16000 \
-        --name=collector_service \
-        rticom/collector-service:latest
-```
-
-### Security Artifacts
-
-When running one of the secure configurations, the following security artifacts
-must be mounted into the container.
-
-**To configure the *RTI Security Plugins*:**
-
-```
--v /path/to/identity_ca.pem:/rti/security/dds/identity_ca.pem
--v /path/to/permissions_ca.pem:/rti/security/dds/permissions_ca.pem
--v /path/to/identity_certificate.pem:/rti/security/dds/identity_certificate.pem
--v /path/to/private_key.pem:/rti/security/dds/private_key.pem
--v /path/to/governance.p7s:/rti/security/dds/governance.p7s
--v /path/to/permissions.p7s:/rti/security/dds/permissions.p7s
-```
-
-* *identity_ca.pem* must contain the certificate of the CA that signed the
-*identity_certificate.pem*.
-* *identity_certificate.pem* must contain the certificate of the *Collector
-Service*.
-* *private_key.pem* must contain the private key of the *Collector Service*.
-* *permissions_ca.pem* must contain the certificate of the CA that signed the
-*permissions.p7s* and *governance.p7s*.
-* *governance.p7s* must contain the governance file of the *Collector Service*.
-* *permissions.p7s* must contain the permissions file of the *Collector Service*.
-
-For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
-
-**To configure HTTPS + Basic Authentication:**
-
-*Collector Service* uses HTTPS + Basic Authentication to encrypt and
-authenticate the HTTP connections created by *Collector Service* to send
-telemetry data and to receive commands from external clients.
-
-To configure HTTPS + Basic Authentication, you need to provide:
-
-```
--v /path/to/rootCA.crt:/rti/security/https/rootCALoki.crt
--v /path/to/rootCA.crt:/rti/security/https/rootCAOtel.crt
--v /path/to/serverPrometheusEndpoint.pem:/rti/security/https/serverPrometheusEndpoint.pem
--v /path/to/serverControl.pem:/rti/security/https/serverControl.pem
--v /path/to/htdigest_control:/rti/security/https/htdigest_control
--v /path/to/htdigest_prometheus:/rti/security/https/htdigest_prometheus
-```
-
-* *rootCALoki.crt* must contain the root certificate of the CA that signed the
-*server.pem* certificate used to communicate with the Grafana Loki server.
-* *rootCAOtel.crt* must contain the root certificate of the CA that signed the
-*server.pem* certificate used to communicate with the OpenTelemetry Collector.
-* *serverPrometheusEndpoint.pem* must contain both a valid server certificate 
-and the corresponding private key for the Prometheus endpoint created
-by *Collector Service*. The Prometheus endpoint is an HTTPS server that
-provides metrics to a Prometheus server.
-* *serverControl.pem* must contain both a valid server certificate and the
-corresponding private key for the control server created by 
-*Collector Service*. The control server is an HTTPS server that receives
-commands from external clients such as the Grafana dashboards running in your
-browser.
-* *htdigest_control* is a password file that contains the username and password 
-for BASIC-Auth. This file is used by the Controllability HTTP server started by *Collector Service*
-to authenticate the HTTP connections created by external clients (for example, to change the verbosity
-of an application). The htdigest file can be created using the 
-[Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
-* *htdigest_prometheus* is a password file that contains the username and password 
-for BASIC-Auth. This file is used by the Prometheus HTTP server started by *Collector Service*
-to authenticate the HTTP connections created by external clients (for example, a Prometheus scraping request). The htdigest file can be created using the 
-[Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
-
-Depending on your security configuration, you may not need to provide all the
-files listed above. For example, if you are not running OpenTelemetry Collector,
-you do not need to provide *rootCAOtel.crt*.
-
-For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
-
-## Custom configuration
-
-**Note:** Custom XML configurations are not officially supported in this release.
-The format of the configuration file is not described in the documentation,
-and it is subject to change in future releases. If you need to provide your own 
-configuration, please contact RTI Support (support@rti.com).
-
-To provide your own configuration, follow these steps when running the container:
-
-* bind-mount your configuration file (for example, MyCollectorService.xml) from the host 
-into the following location in the Docker container: 
-```/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml```
-* select the *Collector Service* configuration in the configuration file by 
-setting the ``CFG_NAME`` environment variable
-
-For example:
-
-```
-docker run -dt \
-        --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
-        -e CFG_NAME="MyCollectorService" \
-        --name=collector_service \
-        rticom/collector-service:latest
-```
-
-## Command-line parameters
-
-You can provide your command-line parameters to *Collector Service* by adding 
-them to the end of the ``docker run`` command. For example:
-
-```
-docker run -dt \
-        --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.3.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.3.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
-        -e CFG_NAME="MyCollectorService" \
-        --name=collector_service \
-        rticom/collector-service:latest \
-        -verbosity WARN
-```
-
-The previous command runs *Collector Service* with the verbosity level set to WARN.
-
-The only command-line parameter supported in this release is **-verbosity**.
-
-To see the list of allowed parameters, use the ``-h`` parameter:
-
-```
-docker run --rm -t rticom/collector-service:latest -h
-```
-
-## Network configuration
-
-The previous examples use the ``--network host`` parameter to run the containers in the host network. The host network is the most straightforward way to run the containers, because it allows the containers to communicate with each other and with the host machine. However, the host network is not available on all platforms and has different levels of support depending on the operating system.
-
-If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
-
-If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use RTI Real-Time WAN Transport and expose the necessary UDP ports using the `-p` option. For more information on RTI Real-Time WAN Transport, refer to the [RTI Real-Time WAN Transport documentation](https://community.rti.com/static/documentation/connext-dds/7.3.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
-
-The following built-in configuration modes use the RTI Real-Time WAN Transport:
-* SecureWAN
-* NonSecureWAN
-* SecureOTelWAN
-* NonSecureOTelWAN
+> Note: Due to limitations of the size of the README file that can be hosted on Docker Hub,
+> the complete instructions on how to use this docker image are not contained in this README
+> file.
+
+For detailed information on how to use this docker image with the `latest` tag, see the full [README](https://github.com/rticommunity/rticonnextdds-containers/blob/release/7.5.0/doc/collector-service/README_FULL.md) in the https://github.com/rticommunity/rticonnextdds-containers repository. You can also access documentation for previous releases by navigating to the ``doc/collector-service`` folder in the repository and selecting the appropriate release branch (e.g., `release/7.3.0`).
 
 ## Release Notes
 
@@ -341,21 +37,22 @@ Additional third party information can be found at https://community.rti.com/doc
 Use the following command to retrieve the *RTI_License_Agreement.pdf* built-in file:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agreement.pdf .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.5.0/RTI_License_Agreement.pdf .
 ```
 
 ## How to get a license file
 
-For an RTI Connext free trial, visit the following link: https://www.rti.com/free-trial/connext. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+An RTI license file is always required to run Collector Service in a Docker container.
 
-If you are an RTI customer, and you need a license file, please contact [RTI support](https://www.rti.com/support).
+### Existing customers
 
-* RTI Connext Professional
-* RTI Security Plugins
-* RTI Real-Time WAN Transport
-* RTI Cloud Discovery Service
+If you are an RTI customer, and you need an RTI Connext license file, contact [RTI support](https://www.rti.com/support). 
 
-All the activation keys are included in the same license file.
+### Evaluators
+
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.5.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+
+To get a free trial license for earlier releases, contact evaluations@rti.com.
 
 ### RTI Supplemental License
 
