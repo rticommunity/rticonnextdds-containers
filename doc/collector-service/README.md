@@ -26,7 +26,7 @@ docker run -d \
 
 The above command starts *Collector Service* with a default configuration 
 that stores the metrics and logs emitted by *Connext* applications using 
-[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.1.0/doc/manuals/addon_products/observability/library.html) 
+[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.2.0/doc/manuals/addon_products/observability/library.html) 
 on domain ID 2 into Prometheus (for metrics) and Grafana Loki (for logs) 
 databases .
 
@@ -291,16 +291,17 @@ docker cp collector_service:/opt/rti.com/rti_connext_dds-7.3.0/RTI_License_Agree
 
 ## How to get a license file
 
-For an RTI Connext free trial, visit the following link: https://www.rti.com/free-trial/connext. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+An RTI license file is always required to run Collector Service in a Docker container.
 
-If you are an RTI customer, and you need a license file, please contact [RTI support](https://www.rti.com/support).
+### Existing customers
 
-* RTI Connext Professional
-* RTI Security Plugins
-* RTI Real-Time WAN Transport
-* RTI Cloud Discovery Service
+If you are an RTI customer, and you need an RTI Connext license file, contact [RTI support](https://www.rti.com/support). 
 
-All the activation keys are included in the same license file.
+### Evaluators
+
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.5.0 or higher. With the free trial you will receive a limited-time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+
+To get a free trial license for earlier releases, contact evaluations@rti.com.
 
 ### RTI Supplemental License
 
