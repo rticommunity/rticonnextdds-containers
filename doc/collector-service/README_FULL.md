@@ -7,7 +7,7 @@ For metrics, logs, and security events _Collector Service_ provides native integ
 with Prometheus®, as the time-series database to store _Connext_ metrics, and Grafana® Loki™,
 as the log aggregation system to store _Connext_ logs. Integration with other backends is
 possible using [OpenTelemetry™](https://opentelemetry.io/) and the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
-For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/addon_products/observability/index.html#).
+For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/index.html).
 
 _Collector Service_ also collects non-metric data (configuration and discovery data) that is
 currently consumed by _Admin Console_ to support the remote debugging feature. For additional information on remote debugging with _Admin Console_ see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
@@ -54,7 +54,7 @@ docker run -dt \
 
 The above command starts _Collector Service_ with a default configuration
 that stores the metrics and logs emitted by _Connext_ applications using
-[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/addon_products/observability/library.html)
+[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/library.html)
 on domain ID 2 into Prometheus (for metrics) and Grafana Loki (for logs)
 databases. _Collector Service_ also collects and distributes the telemetry
 data required for the _Admin Console_ remote debugging feature.
@@ -309,7 +309,7 @@ _permissions_output.p7s_ and _governance_output.p7s_.
 `exporters`.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
 
 **To configure HTTPS + Basic Authentication:**
 
@@ -356,7 +356,7 @@ files listed above. For example, if you are not running OpenTelemetry Collector,
 you do not need to provide _rootCAOtel.crt_.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/addon_products/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
 
 ## Remote debugging configuration for Admin Console
 
