@@ -1,6 +1,6 @@
 Welcome to *RTI® Perftest*, an *RTI Connext®* out-of-the-box solution designed to measure and analyze the performance of *RTI Connext* applications. This tool provides comprehensive metrics for latency, throughput, and other critical performance aspects.
 
-For additional information on *RTI Perftest*, refer to the [RTI documentation](https://community.rti.com/static/documentation/perftest/4.1.1/introduction.html).
+For additional information on *RTI Perftest*, refer to the [RTI documentation](https://community.rti.com/static/documentation/perftest/4.2/introduction.html).
 
 The documentation shown on this page applies to the *Perftest* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
 
@@ -178,7 +178,7 @@ If you want to run the containers in a custom network isolated from the host net
 
 If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use *RTI Real-Time WAN Transport* and expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.3.1/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
-*Perftest* allows configuring the transport properties using the `-transport` parameter. For more information on the `-transport` parameter, refer to the [RTI Perftest transport-specific options documentation](https://community.rti.com/static/documentation/perftest/4.1.1/command_line_parameters.html#transport-specific-options).
+*Perftest* allows configuring the transport properties using the `-transport` parameter. For more information on the `-transport` parameter, refer to the [RTI Perftest transport-specific options documentation](https://community.rti.com/static/documentation/perftest/4.2/command_line_parameters.html#transport-specific-options).
 
 ## Release Notes
 
