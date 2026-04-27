@@ -1,6 +1,6 @@
 Welcome to _RTI® Recording Service_, an _RTI Connext®_ application that records DDS _Topics_ and discovery data.
 
-For additional information on _RTI Recording Service_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/services/recording_service/index.html).
+For additional information on _RTI Recording Service_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/services/recording_service/index.html).
 
 ## Releases
 
@@ -15,18 +15,18 @@ Running _Recording Service_ on Docker is as simple as running the `docker run` c
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName default
 ```
 
-This command starts _Recording Service_ with an example configuration that records all _Topics_ in domain 0. The database files are going to be created in `/home/rtiuser/rti_workspace/7.6.0/database/`.
+This command starts _Recording Service_ with an example configuration that records all _Topics_ in domain 0. The database files are going to be created in `/home/rtiuser/rti_workspace/7.7.0/database/`.
 
 To run _Recording Service_, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat
+-v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat
 ```
 
 The _Recording Service_ container image uses the following user and group:
@@ -36,14 +36,14 @@ The _Recording Service_ container image uses the following user and group:
 
 The _Recording Service_ container image uses the following working directory:
 
-- `/home/rtiuser/rti_workspace/7.6.0/user_config/recording_service`
+- `/home/rtiuser/rti_workspace/7.7.0/user_config/recording_service`
 
 ## Built-in configuration
 
 Use the following command to retrieve the _Recording Service_ built-in configuration file:
 
 ```
-docker cp recording_service:/opt/rti.com/rti_connext_dds-7.6.0/resource/xml/RTI_RECORDING_SERVICE.xml .
+docker cp recording_service:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_RECORDING_SERVICE.xml .
 ```
 
 The built-in configuration supports the following execution modes:
@@ -58,7 +58,7 @@ To select an execution mode, pass the `-cfgName` parameter with the desired conf
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName default
@@ -78,7 +78,7 @@ using environment variables:
 
 ### Database files storage using default storage directory
 
-The default and defaultJson configurations store the database files in `/home/rtiuser/rti_workspace/7.6.0/database`. Without additional configuration parameters, the files created in this directory are not persisted across container restarts.
+The default and defaultJson configurations store the database files in `/home/rtiuser/rti_workspace/7.7.0/database`. Without additional configuration parameters, the files created in this directory are not persisted across container restarts.
 
 To persist data across container restarts, you have two options:
 
@@ -92,8 +92,8 @@ The second option is recommended for persisting the database files across contai
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        --mount type=volume,source=recording_service_database,target=/home/rtiuser/rti_workspace/7.6.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        --mount type=volume,source=recording_service_database,target=/home/rtiuser/rti_workspace/7.7.0/database \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName default
@@ -106,8 +106,8 @@ It is not necessary to create the volume `recording_service_database`. Docker cr
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/recording_service_database:/home/rtiuser/rti_workspace/7.6.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/recording_service_database:/home/rtiuser/rti_workspace/7.7.0/database \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName default
@@ -160,7 +160,7 @@ sudo chown -R 1010:1010 /var/lib/docker/volumes/recording_service_database/_data
    ```
    docker run -dt \
            --network host \
-           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
            --mount type=volume,source=recording_service_database,target=/home/rtiuser/database \
            -e WORKSPACE_DIR=/home/rtiuser/database \
            --name=recording_service \
@@ -173,7 +173,7 @@ sudo chown -R 1010:1010 /var/lib/docker/volumes/recording_service_database/_data
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -v $PWD/recording_service_database:/home/rtiuser/database \
         -e WORKSPACE_DIR=/home/rtiuser/database \
         --name=recording_service \
@@ -220,7 +220,7 @@ sudo chown -R 1010:1010 /var/lib/docker/volumes/recording_service_database/_data
 To provide your own configuration, follow these steps when running the container:
 
 - bind-mount your configuration file (for example, MyRecordingService.xml) from the host into the following location in the Docker container:
-  `/home/rtiuser/rti_workspace/7.6.0/user_config/recording_service/USER_RECORDING_SERVICE.xml`
+  `/home/rtiuser/rti_workspace/7.7.0/user_config/recording_service/USER_RECORDING_SERVICE.xml`
 - select the _Recording Service_ configuration in the configuration file by adding the `-cfgName` parameter with the name of your selected configuration
 
 For example:
@@ -228,8 +228,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyRecordingService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/recording_service/USER_RECORDING_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyRecordingService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/recording_service/USER_RECORDING_SERVICE.xml \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName MyRecordingService
@@ -242,8 +242,8 @@ To provide your command-line parameters to _Recording Service_, add them to the 
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyRecordingService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/recording_service/USER_RECORDING_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyRecordingService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/recording_service/USER_RECORDING_SERVICE.xml \
         --name=recording_service \
         rticom/recording-service:latest \
         -cfgName MyRecordingService \
@@ -264,7 +264,7 @@ The previous examples use the `--network host` parameter to run the containers i
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 This image does not provide built-in configuration for _RTI Real-Time WAN Transport_. If you want to use it, you will need to provide your own configuration file.
 
@@ -282,10 +282,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp recording_service:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp recording_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -298,7 +298,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 
