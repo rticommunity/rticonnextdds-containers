@@ -1,7 +1,7 @@
 Welcome to _RTI® Persistence Service_, an _RTI Connext®_ application designed to persist DDS _Topic_ data. It ensures that data produced by a _DataWriter_ can survive beyond the lifetime of the _DataWriter_ itself, making it available to late-joining _DataReaders_ that require data with TRANSIENT or PERSISTENT durability.
 
 For additional information on _RTI Persistence Service_, refer to the
-[RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartPersistence.htm).
+[RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartPersistence.htm).
 
 ## Releases
 
@@ -16,7 +16,7 @@ Running _Persistence Service_ on Docker is as simple as running the `docker run`
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName default
@@ -27,7 +27,7 @@ This command starts _Persistence Service_ with an example configuration that per
 To run _Persistence Service_, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat
+-v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat
 ```
 
 The _Persistence Service_ container image uses the following user and group:
@@ -37,14 +37,14 @@ The _Persistence Service_ container image uses the following user and group:
 
 The _Persistence Service_ container image uses the following working directory:
 
-- `/home/rtiuser/rti_workspace/7.6.0/user_config/persistence_service`
+- `/home/rtiuser/rti_workspace/7.7.0/user_config/persistence_service`
 
 ## Built-in configuration
 
 Use the following command to retrieve the _Persistence Service_ built-in configuration file:
 
 ```
-docker cp persistence_service:/opt/rti.com/rti_connext_dds-7.6.0/resource/xml/RTI_PERSISTENCE_SERVICE.xml .
+docker cp persistence_service:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_PERSISTENCE_SERVICE.xml .
 ```
 
 The built-in configuration supports the following execution modes:
@@ -59,7 +59,7 @@ To select an execution mode, pass the `-cfgName` parameter with the desired conf
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName defaultDisk
@@ -72,12 +72,12 @@ When running the Docker container built-in configurations, there are several par
 ```
 -e ADMINISTRATION_DOMAIN=<The domain ID Persistence Service uses for administration. default: 0>
 -e DATA_DOMAIN=<The domain ID Persistence Service uses for the user data. default: 0>
--e STORAGE_DIRECTORY=<The folder where the database file(s) are going to be generated. default: /home/rtiuser/rti_workspace/7.6.0/database>
+-e STORAGE_DIRECTORY=<The folder where the database file(s) are going to be generated. default: /home/rtiuser/rti_workspace/7.7.0/database>
 ```
 
 ### Database files storage with defaultDisk using default storage directory
 
-The `defaultDisk` configuration stores the database files in `/home/rtiuser/rti_workspace/7.6.0/database`. Without additional configuration parameters, the files created in this directory are not persisted across container restarts.
+The `defaultDisk` configuration stores the database files in `/home/rtiuser/rti_workspace/7.7.0/database`. Without additional configuration parameters, the files created in this directory are not persisted across container restarts.
 
 To persist data across container restarts, you have two options:
 
@@ -91,8 +91,8 @@ The second option is recommended for persisting the database files across contai
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        --mount type=volume,source=persistence_service_database,target=/home/rtiuser/rti_workspace/7.6.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        --mount type=volume,source=persistence_service_database,target=/home/rtiuser/rti_workspace/7.7.0/database \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName defaultDisk
@@ -105,8 +105,8 @@ It is not necessary to create the volume `persistence_service_database`. Docker 
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/persistence_service_database:/home/rtiuser/rti_workspace/7.6.0/database \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/persistence_service_database:/home/rtiuser/rti_workspace/7.7.0/database \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName defaultDisk
@@ -159,7 +159,7 @@ sudo chown -R 1010:1010 /var/lib/docker/volumes/persistence_service_database/_da
    ```
    docker run -dt \
            --network host \
-           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+           -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
            --mount type=volume,source=persistence_service_database,target=/home/rtiuser/database \
            -e STORAGE_DIRECTORY=/home/rtiuser/database \
            --name=persistence_service \
@@ -172,7 +172,7 @@ sudo chown -R 1010:1010 /var/lib/docker/volumes/persistence_service_database/_da
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -v $PWD/persistence_service_database:/home/rtiuser/database \
         -e STORAGE_DIRECTORY=/home/rtiuser/database \
         --name=persistence_service \
@@ -187,7 +187,7 @@ docker run -dt \
 To provide your own configuration, follow these steps when running the container:
 
 - bind-mount your configuration file (for example, MyPersistenceService.xml) from the host into the following location in the Docker container:
-  `/home/rtiuser/rti_workspace/7.6.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml`
+  `/home/rtiuser/rti_workspace/7.7.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml`
 - select the _Persistence Service_ configuration in the configuration file by adding the `-cfgName`
   parameter with the name of your selected configuration
 
@@ -196,8 +196,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyPersistenceService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyPersistenceService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName MyPersistenceService
@@ -210,8 +210,8 @@ To provide your command-line parameters to _Persistence Service_, add them to th
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyPersistenceService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyPersistenceService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/persistence_service/USER_PERSISTENCE_SERVICE.xml \
         --name=persistence_service \
         rticom/persistence-service:latest \
         -cfgName MyPersistenceService \
@@ -232,9 +232,46 @@ The previous examples use the `--network host` parameter to run the containers i
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use *RTI Real-Time WAN Transpor*t and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use *RTI Real-Time WAN Transpor*t and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 This image does not provide built-in configuration for _RTI Real-Time WAN Transport_. If you want to use it, you will need to provide your own configuration file.
+
+## Verifying a running Persistence Service
+
+_Persistence Service_ includes an optional HTTP health check server that enables external monitoring systems to verify that the service is running and responsive. This feature is especially valuable in containerized and cloud-native deployments.
+
+The health check server is a lightweight HTTP server that listens on a configurable port and responds to any HTTP request with an HTTP 200 OK status. This simple mechanism allows container orchestrators (such as Kubernetes), load balancers, and monitoring tools to detect whether _Persistence Service_ is running and responsive.
+
+You can configure health probes to use the health check endpoint. For example, in a Kubernetes deployment:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: persistence-service
+spec:
+  containers:
+  - name: rtipersistenceservice
+    image: rticom/persistence-service:latest
+    args: ["-cfgName", "defaultDisk", "-healthCheckPort", "9000"]
+    ports:
+    - containerPort: 9000
+      name: health
+    livenessProbe:
+      httpGet:
+        path: /
+        port: health
+      initialDelaySeconds: 10
+      periodSeconds: 30
+    readinessProbe:
+      httpGet:
+        path: /
+        port: health
+      initialDelaySeconds: 5
+      periodSeconds: 10
+```
+
+This configuration ensures that Kubernetes can automatically detect and restart the _Persistence Service_ pod if it becomes unresponsive.
 
 ## Release Notes
 
@@ -250,10 +287,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp persistence_service:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp persistence_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -266,7 +303,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 
