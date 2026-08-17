@@ -1,102 +1,173 @@
-Welcome to *RTI® Web Integration Service*, an *RTI Connext®* out-of-the-box solution for integrating web-based applications and services with *RTI Connext*.
+Welcome to *RTI® Perftest*, an *RTI Connext®* out-of-the-box solution designed to measure and analyze the performance of *RTI Connext* applications. This tool provides comprehensive metrics for latency, throughput, and other critical performance aspects.
 
-For additional information on *RTI Web Integration Service*, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/services/web_integration_service/index.html).
+For additional information on *RTI Perftest*, refer to the [RTI documentation](https://community.rti.com/static/documentation/perftest/4.3/introduction.html).
 
-## Releases
+The documentation shown on this page applies to the *Perftest* Docker image with the `latest` tag. The latest tag refers to the most recent Long Term Support (LTS) version released from RTI. For specific tag documentation, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
 
-The documentation on this page applies to the *Web Integration Service* Docker image with the `latest` tag, which refers to the most recent image released by RTI. To confirm the *Connext* release that corresponds to the `latest` tag, or to review the other *Connext* releases that support the *Web Integration Service* image, go to https://hub.docker.com/r/rticom/web-integration-service/tags.
+# Using the Perftest container image
 
-For documentation on previous releases of the *Web Integration Service* image, refer to the https://github.com/rticommunity/rticonnextdds-containers repository.
+Running *Perftest* on Docker is as simple as running the ``docker run`` command:
 
-## Using the Web Integration Service container image
+**Publisher:**
 
-Running *Web Integration Service* on Docker is as simple as running the ``docker run`` command:
+The following command runs *Perftest* as a publisher with a data length of 1024 bytes for 60 seconds. 
 
 ```
-docker run -dt \
+docker run -t \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
-        --name=web_integration_service \
-        rticom/web-integration-service:latest \
-        -cfgName shapesDemoTutorial \
-        -documentRoot /home/rtiuser/rti_workspace/7.7.0/examples/web_integration_service
+        --name=perftest_pub \
+        rticom/perftest:latest \
+        -pub -dataLen 1024 -executionTime 60
 ```
 
-This command starts an instance of *Web Integration Service* in [localhost](http://localhost:8080). By default, *Web Integration Service* listens for HTTP requests on port 8080.
-
-To run *Web Integration Service*, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
+You should see output similar to the following:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat
+Waiting to discover 1 subscribers ...
+Waiting for subscribers announcement ...
+Sending 400 initialization pings ...
+Sending data ...
 ```
 
-The *Web Integration Service* container image uses the following user and group:
+**Subscriber:**
 
-* User: rtiuser (1010)
-* Group: rtigroup (1010)
-
-The *Web Integration Service* container image uses the following working directory:
-
-* ```/home/rtiuser/rti_workspace/7.7.0/user_config/web_integration_service```
-
-## Built-in configuration
-
-Use the following command to retrieve the *Web Integration Service* built-in configuration file:
+The following command runs *Perftest* as a subscriber with a data length of 1024 bytes.
 
 ```
-docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_WEB_INTEGRATION_SERVICE.xml
+docker run -t \
+        --network host \
+        --name=perftest_sub \
+        rticom/perftest:latest \
+        -sub -dataLen 1024
 ```
 
-The built-in configuration provides the following execution mode:
+You should see output similar to the following:
 
-|Configuration Name|Description|
-|------------------|-----------|
-|default|Starts an instance of *Web Integration Service* with an empty configuration. By default, *Web Integration Service* listens for HTTP requests on port 8080.|
+```
+Waiting to discover 1 publishers ...
+Interval Throughput for 1024 Bytes:
+Length (Bytes), Total Samples,  Samples/s, Avg Samples/s,     Mbps,  Avg Mbps, Lost Samples, Lost Samples (%)
+Waiting for data ...
+```
 
-## Custom configuration
+The above ``docker run`` command-line options run the containers in the foreground. To run the containers in the background, add the ``-d`` parameter to the ``docker run`` command.
+
+With the ``-d`` parameter, you can view the container logs using the following additional commands:
+
+```
+docker logs perftest_pub
+docker logs perftest_sub
+```
+
+The *Perftest* container image uses the following user and group:
+
+* User: rtiuser (1000)
+* Group: rtigroup (1000)
+
+The *Perftest* container image uses the following working directory:
+
+* ```/home/rtiuser/rti_workspace/7.7.0/user_config/perftest```
+
+## Built-in Configuration
+
+Use the following command to retrieve the *Perftest* built-in configuration file:
+
+```
+docker cp perftest:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_PERFTEST.xml .
+```
+
+## Custom Configuration
 
 To provide your own configuration, follow these steps when running the container:
 
-* bind-mount your configuration file (for example, MyWebIntegrationService.xml) from the host 
+* bind-mount your configuration file from the host
 into the following location in the Docker container: 
-```/home/rtiuser/rti_workspace/7.7.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml```
-* select the *Web Integration Service* configuration in the configuration file by adding the ``-cfgName``
-parameter with the name of your selected configuration
+```/home/rtiuser/rti_workspace/7.7.0/user_config/perftest/USER_PERFTEST_CONFIG.xml```
+* select the *Perftest* configuration in the configuration file by adding the ```-cfgName``` parameter with the name of your selected configuration 
 
 For example:
 
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
-        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
-        --name=web_integration_service \
-        rticom/web-integration-service:latest \
-        -cfgName MyWebIntegrationService
+        -v $PWD/MyPerftestConfig.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/perftest/USER_PERFTEST_CONFIG.xml \
+        --name=perftest \
+        rticom/perftest:latest \
+        -cfgName MyPerftestConfig
 ```
 
-## Command-line parameters
+## Command-Line Parameters
 
-To provide your command-line parameters to *Web Integration Service*, add 
+To provide additional command-line parameters to *Perftest*, add
 them to the end of the ``docker run`` command. For example:
 
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
-        -v $PWD/MyWebIntegrationService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/web_integration_service/USER_WEB_INTEGRATION_SERVICE.xml \
-        --name=web_integration_service \
-        rticom/web-integration-service:latest \
-        -cfgName MyWebIntegrationService \
-        -listeningPorts 9090
+        --name=perftest \
+        rticom/perftest:latest \
+        -pub -dataLen 1024 -executionTime 60 -verbosity WARN
 ```
 
-The above example runs *Web Integration Service* and changes the listening port from the default 8080 to 9090.
+The above example runs *Perftest* with the verbosity level set to WARN.
 
 To see the list of allowed parameters, use the ``-h`` parameter:
 
 ```
-docker run --rm -t rticom/web-integration-service:latest -h
+docker run --rm -t rticom/perftest:latest -h
+```
+
+## Use Cases
+
+Following are two *Perftest* container image use case examples.
+
+### Running a Basic Throughput Test
+
+The following examples run a basic throughput test.
+
+**Publisher:**
+
+```
+docker run -dt \
+        --network host \
+        --name=perftest_pub \
+        rticom/perftest:latest \
+        -pub -dataLen 1024 -executionTime 60
+```
+**Subscriber:**
+
+```
+docker run -dt \
+        --network host \
+        --name=perftest_sub \
+        rticom/perftest:latest \
+        -sub -dataLen 1024
+```
+
+
+
+### Running a Latency Test
+
+The following examples run a latency test.
+
+**Publisher:**
+
+```
+docker run -dt \
+        --network host \
+        --name=perftest_pub \
+        rticom/perftest:latest \
+        -pub -latencyTest -dataLen 1024 -executionTime 60
+```
+
+**Subscriber:**
+
+```
+docker run -dt \
+        --network host \
+        --name=perftest_sub \
+        rticom/perftest:latest \
+        -sub -dataLen 1024
 ```
 
 ## Network configuration
@@ -105,7 +176,9 @@ The previous examples use the ``--network host`` parameter to run the containers
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you  want to make the containers accessible from outside the Docker environment without using the host network, you can expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you  want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use *RTI Real-Time WAN Transport* and expose the necessary UDP ports using the `-p` option. For more information on *RTI Real-Time WAN Transport*, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+
+*Perftest* allows configuring the transport properties using the `-transport` parameter. For more information on the `-transport` parameter, refer to the [RTI Perftest transport-specific options documentation](https://community.rti.com/static/documentation/perftest/4.3/command_line_parameters.html#transport-specific-options).
 
 ## Release Notes
 
@@ -113,7 +186,7 @@ Release notes for RTI *Connext* products are available on the RTI Community Port
 
 ## License
 
-RTI® Web Integration Service is licensed under the following supplemental license terms and the Software License Agreement accompanying RTI Connext® Professional (https://www.rti.com/free-trial/terms).
+RTI® Perftest is licensed under the following supplemental license terms and the Software License Agreement accompanying RTI Connext® Professional (https://www.rti.com/free-trial/terms).
 
 This image uses Ubuntu as the base image, and your usage must comply with the applicable license terms found [here](https://hub.docker.com/_/ubuntu).
 
@@ -124,22 +197,8 @@ Additional third party information can be found at https://community.rti.com/doc
 Use the following command to retrieve the *RTI_License_Agreement_LM.pdf* built-in file:
 
 ```
-docker cp web_integration_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
+docker cp perftest:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
-
-## How to get a license file
-
-An RTI license file is always required to run Web Integration Service in a Docker container.
-
-### Existing customers
-
-If you are an RTI customer, and you need an RTI Connext license file, contact [RTI support](https://www.rti.com/support). 
-
-### Evaluators
-
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
-
-To get a free trial license for earlier releases, contact evaluations@rti.com.
 
 ### RTI Supplemental License
 

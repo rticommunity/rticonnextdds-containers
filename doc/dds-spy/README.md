@@ -1,6 +1,6 @@
 Welcome to _RTI® DDS Spy_, an _RTI Connext®_ tool that allows developers to monitor DDS traffic within a domain. This tool helps in debugging and analyzing real-time data published in the DDS network.
 
-For additional information on _RTI DDS Spy_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/tools/rti_dds_spy/introduction.html).
+For additional information on _RTI DDS Spy_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/tools/rti_dds_spy/introduction.html).
 
 ## Releases
 
@@ -29,14 +29,14 @@ The _DDS Spy_ container image uses the following user and group:
 
 The _DDS Spy_ container image uses the following working directory:
 
-- `/home/rtiuser/rti_workspace/7.6.0/user_config/spy`
+- `/home/rtiuser/rti_workspace/7.7.0/user_config/spy`
 
 ## Built-in configuration
 
 Use the following command to retrieve the _DDS Spy_ built-in QoS configuration file:
 
 ```
-docker cp dds_spy:/opt/rti.com/rti_connext_dds-7.6.0/resource/xml/RTI_DDS_SPY_QOS_PROFILES.xml .
+docker cp dds_spy:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_DDS_SPY_QOS_PROFILES.xml .
 ```
 
 ## Custom configuration
@@ -45,7 +45,7 @@ To provide your own configuration, follow these steps when running the container
 
 - bind-mount your QoS configuration file from the host
   into the following location in the Docker container:
-  `/home/rtiuser/rti_workspace/7.6.0/user_config/spy/USER_DDS_SPY_QOS_PROFILES.xml`
+  `/home/rtiuser/rti_workspace/7.7.0/user_config/spy/USER_DDS_SPY_QOS_PROFILES.xml`
 - select the _DDS Spy_ QoS configuration file by adding the `-qosFile`
   parameter with the name of your mounted QoS configuration file
 
@@ -54,7 +54,7 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/MyQOSProfiles.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/spy/USER_DDS_SPY_QOS_PROFILES.xml \
+        -v $PWD/MyQOSProfiles.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/spy/USER_DDS_SPY_QOS_PROFILES.xml \
         --name=dds_spy \
         rticom/dds-spy:latest \
         -domainId 0 \
@@ -91,7 +91,7 @@ The previous examples use the `--network host` parameter to run the containers i
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 This image does not provide built-in configuration for _RTI Real-Time WAN Transport_. If you want to use it, you will need to provide your own configuration file.
 
@@ -109,10 +109,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp dds_spy:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp dds_spy:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -125,7 +125,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 
