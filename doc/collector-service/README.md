@@ -7,10 +7,10 @@ For metrics, logs, and security events _Collector Service_ provides native integ
 with Prometheus®, as the time-series database to store _Connext_ metrics, and Grafana® Loki™,
 as the log aggregation system to store _Connext_ logs. Integration with other backends is
 possible using [OpenTelemetry™](https://opentelemetry.io/) and the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
-For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/index.html).
+For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/observability/index.html).
 
 _Collector Service_ also collects non-metric data (configuration and discovery data) that is
-currently consumed by _Admin Console_ to support the remote debugging feature. For additional information on remote debugging with _Admin Console_ see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
+currently consumed by _Admin Console_ to support the remote debugging feature. For additional information on remote debugging with _Admin Console_ see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
 
 ## Using the Collector Service container image
 
@@ -18,7 +18,7 @@ currently consumed by _Admin Console_ to support the remote debugging feature. F
 > the complete instructions on how to use this docker image are not contained in this README
 > file.
 
-For detailed information on how to use this docker image with the `latest` tag, see the full [README](https://github.com/rticommunity/rticonnextdds-containers/blob/release/7.6.0/doc/collector-service/README_FULL.md) in the https://github.com/rticommunity/rticonnextdds-containers repository. You can also access documentation for previous releases by navigating to the `doc/collector-service` folder in the repository and selecting the appropriate release branch (e.g., `release/7.3.0`).
+For detailed information on how to use this docker image with the `latest` tag, see the full [README](https://github.com/rticommunity/rticonnextdds-containers/blob/release/7.7.0/doc/collector-service/README_FULL.md) in the https://github.com/rticommunity/rticonnextdds-containers repository. You can also access documentation for previous releases by navigating to the `doc/collector-service` folder in the repository and selecting the appropriate release branch (e.g., `release/7.3.0`).
 
 ## Known issues
 
@@ -59,7 +59,7 @@ Follow the steps below to enable _Monitoring Library 2.0_, then install and conf
             </participant_factory_qos>
 
     The profile containing the snippet must have _is_default_participant_factory_profile_ set to true.
-    For more information on configuring _Monitoring Library 2.0_ see [MONTORING QosPolicy](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/MONITORING_QosPolicy.htm).
+    For more information on configuring _Monitoring Library 2.0_ see [MONTORING QosPolicy](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/MONITORING_QosPolicy.htm).
 
     The following example is a complete profile:
 
@@ -87,7 +87,7 @@ Follow the steps below to enable _Monitoring Library 2.0_, then install and conf
                  </dds>
 
 2.  Install the appropriate _Connext_ target package for your architecture, as described in the
-    [RTI Connext Installation Guide](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/installation_guide/installing.html).
+    [RTI Connext Installation Guide](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/installation_guide/installing.html).
 
 3.  After the target package is installed, configure your system so that the RTI services can load the library.
     This can be done in one of two ways, as shown below. Only one of the following methods is required.
@@ -137,10 +137,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -153,7 +153,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 

@@ -1,6 +1,6 @@
 Welcome to _RTI® Routing Service_, an _RTI Connext®_ out-of-the-box solution that allows developers to rapidly scale and integrate real-time systems that are disparate or geographically dispersed. It scales _RTI Connext_ applications across domains, LANs, and WANs, including firewall and NAT traversal.
 
-For additional information on _RTI Routing Service_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/services/routing_service/index.html).
+For additional information on _RTI Routing Service_, refer to the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/services/routing_service/index.html).
 
 ## Releases
 
@@ -15,7 +15,7 @@ Running _Routing Service_ on Docker is as simple as running the `docker run` com
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=routing_service \
         rticom/routing-service:latest \
         -cfgName DomainBridgingLAN
@@ -26,7 +26,7 @@ This command starts _Routing Service_ with a sample configuration that routes al
 To run _Routing Service_, you will need an RTI license file. Bind-mount your license from the host by using the following command-line parameter:
 
 ```
--v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat
+-v $PWD/your/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat
 ```
 
 The _Routing Service_ container image uses the following user and group:
@@ -36,14 +36,14 @@ The _Routing Service_ container image uses the following user and group:
 
 The _Routing Service_ container image uses the following working directory:
 
-- `/home/rtiuser/rti_workspace/7.6.0/user_config/routing_service`
+- `/home/rtiuser/rti_workspace/7.7.0/user_config/routing_service`
 
 ## Built-in configuration
 
 Use the following command to retrieve the _Routing Service_ built-in configuration file:
 
 ```
-docker cp routing_service:/opt/rti.com/rti_connext_dds-7.6.0/resource/xml/RTI_ROUTING_SERVICE.xml .
+docker cp routing_service:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_ROUTING_SERVICE.xml .
 ```
 
 The built-in configuration supports the following execution modes:
@@ -65,7 +65,7 @@ To select an execution mode, pass the `-cfgName` parameter with the desired conf
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=routing_service \
         rticom/routing-service:latest \
         -cfgName RelayWAN
@@ -103,7 +103,7 @@ To provide your own configuration, follow these steps when running the container
 
 - bind-mount your configuration file (for example, MyRoutingService.xml) from the host
   into the following location in the Docker container:
-  `/home/rtiuser/rti_workspace/7.6.0/user_config/routing_service/USER_ROUTING_SERVICE.xml`
+  `/home/rtiuser/rti_workspace/7.7.0/user_config/routing_service/USER_ROUTING_SERVICE.xml`
 - select the _Routing Service_ configuration in the configuration file by adding the `-cfgName`
   parameter with the name of your selected configuration
 
@@ -112,8 +112,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyRoutingService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/routing_service/USER_ROUTING_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyRoutingService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/routing_service/USER_ROUTING_SERVICE.xml \
         --name=routing_service \
         rticom/routing-service:latest \
         -cfgName MyRoutingService
@@ -127,8 +127,8 @@ them to the end of the `docker run` command. For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyRoutingService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/routing_service/USER_ROUTING_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyRoutingService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/routing_service/USER_ROUTING_SERVICE.xml \
         --name=routing_service \
         rticom/routing-service:latest \
         -cfgName MyRoutingService \
@@ -149,7 +149,7 @@ The previous examples use the `--network host` parameter to run the containers i
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [User’s Manual](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 This image provides a built-in configuration for _RTI Real-Time WAN Transport_ called _RelayWAN_. You can also provide additional configurations for the _RTI Real-Time WAN Transport_ by using your own configuration file.
 
@@ -167,10 +167,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp routing_service:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp routing_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -183,7 +183,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 

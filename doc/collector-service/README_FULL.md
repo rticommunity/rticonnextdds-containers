@@ -7,10 +7,10 @@ For metrics, logs, and security events _Collector Service_ provides native integ
 with Prometheus®, as the time-series database to store _Connext_ metrics, and Grafana® Loki™,
 as the log aggregation system to store _Connext_ logs. Integration with other backends is
 possible using [OpenTelemetry™](https://opentelemetry.io/) and the [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/).
-For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/index.html).
+For additional information on _RTI Connext Observability Framework_, see the [RTI documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/observability/index.html).
 
 _Collector Service_ also collects non-metric data (configuration and discovery data) that is
-currently consumed by _Admin Console_ to support the remote debugging feature. For additional information on remote debugging with _Admin Console_ see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
+currently consumed by _Admin Console_ to support the remote debugging feature. For additional information on remote debugging with _Admin Console_ see [Remote Debugging](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/tools/admin_console/p2_administration/features_reference/ref_remote_debugging.html#remote-debugging-experimental).
 
 To improve scalability, a _Collector Service_ instance can be configured to forward telemetry data to another _Collector Service_. This approach is especially useful in large systems where applications run across multiple networks. In such environments, it is recommended to run one _Collector Service_ per network and configure each to forward telemetry data to a central _Collector Service_. The central instance can then store the data in third-party backends or forward it to _Admin Console_ for remote debugging.
 
@@ -47,14 +47,14 @@ Running _Collector Service_ on Docker is as simple as running the `docker run` c
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=collector_service \
         rticom/collector-service:latest
 ```
 
 The above command starts _Collector Service_ with a default configuration
 that stores the metrics and logs emitted by _Connext_ applications using
-[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/library.html)
+[Connext Monitoring Library 2.0](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/observability/library.html)
 on domain ID 2 into Prometheus (for metrics) and Grafana Loki (for logs)
 databases. _Collector Service_ also collects and distributes the telemetry
 data required for the _Admin Console_ remote debugging feature.
@@ -70,7 +70,7 @@ container. Bind-mount your license from the host by using the following
 command-line parameter:
 
 ```
--v /path/to/your_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat
+-v /path/to/your_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat
 ```
 
 The _Collector Service_ container image uses the following user and group:
@@ -80,7 +80,7 @@ The _Collector Service_ container image uses the following user and group:
 
 The _Collector Service_ container image uses the following working directory:
 
-- `/home/rtiuser/rti_workspace/7.6.0/user_config/collector_service`
+- `/home/rtiuser/rti_workspace/7.7.0/user_config/collector_service`
 
 The following table indicates the RTI licenses required based on your answers
 to the questions in the first two columns.
@@ -98,7 +98,7 @@ Use the following command to retrieve the _Collector Service_ built-in
 configuration file:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.6.0/resource/xml/RTI_COLLECTOR_SERVICE.xml .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.7.0/resource/xml/RTI_COLLECTOR_SERVICE.xml .
 ```
 The built-in configuration file supports the following profiles:
 
@@ -107,27 +107,47 @@ The built-in configuration file supports the following profiles:
 |NonSecureForwarderLANtoLAN  |dds_exporter          |LAN to LAN |No       |
 |NonSecureForwarderLANtoWAN  |dds_exporter          |LAN to WAN |No       |
 |NonSecureForwarderWANtoWAN  |dds_exporter          |WAN to WAN |No       |
+|LWSecureForwarderLANtoLAN   |dds_exporter          |LAN to LAN |Yes      |
+|LWSecureForwarderLANtoWAN   |dds_exporter          |LAN to WAN |Yes      |
+|LWSecureForwarderWANtoWAN   |dds_exporter          |WAN to WAN |Yes      |
 |SecureForwarderLANtoLAN     |dds_exporter          |LAN to LAN |Yes      |
 |SecureForwarderLANtoWAN     |dds_exporter          |LAN to WAN |Yes      |
 |SecureForwarderWANtoWAN     |dds_exporter          |WAN to WAN |Yes      |
 |NonSecureLAN                |prometheus_exporter, loki_exporter, websocket_exporter |LAN        |No       |
 |NonSecureWAN                |prometheus_exporter, loki_exporter, websocket_exporter |WAN        |No       |
+|LWSecureLAN                 |prometheus_exporter, loki_exporter, websocket_exporter |LAN        |Yes      |
+|LWSecureWAN                 |prometheus_exporter, loki_exporter, websocket_exporter |WAN        |Yes      |
 |SecureLAN                   |prometheus_exporter, loki_exporter, websocket_exporter |LAN        |Yes      |
 |SecureWAN                   |prometheus_exporter, loki_exporter, websocket_exporter |WAN        |Yes      |
 |NonSecureOTelLAN            |otlp_exporter, websocket_exporter                      |LAN        | No      |
 |NonSecureOTelWAN            |otlp_exporter, websocket_exporter                      |WAN        | No      |
+|LWSecureOTelLAN               |otlp_exporter, websocket_exporter                      |LAN        |Yes      |
+|LWSecureOTelWAN               |otlp_exporter, websocket_exporter                      |WAN        |Yes      |
 |SecureOTelLAN               |otlp_exporter, websocket_exporter                      |LAN        |Yes      |
 |SecureOTelWAN               |otlp_exporter, websocket_exporter                      |WAN        |Yes      |
 |NonSecureRemoteDebuggingLAN |websocket_exporter                                     |LAN        |No       |
 |NonSecureRemoteDebuggingWAN |websocket_exporter                                     |WAN        |No       |
+|LWSecureRemoteDebuggingLAN    |websocket_exporter                                     |LAN        |Yes      |
+|LWSecureRemoteDebuggingWAN    |websocket_exporter                                     |WAN        |Yes      |
 |SecureRemoteDebuggingLAN    |websocket_exporter                                     |LAN        |Yes      |
 |SecureRemoteDebuggingWAN    |websocket_exporter                                     |WAN        |Yes      |
+
+In LWSecure profiles, _Collector Service_ uses _Lightweight Builtin Security Plugins_.
+
+In Secure profiles, _Collector Service_ uses _RTI® Security Plugins_.
 
 In LAN profiles, _Collector Service_ uses _UDPv4_ and _SHMEM_ transports to 
 receive telemetry data from _Connext_ applications and runs on the same LAN 
 where the applications run.
 
-NOTE: Multicast is not supported in the _Collector Service_ Docker container at this time.
+NOTE: The _Collector Service_ Docker container supports Multicast.
+_Monitoring Library 2.0_ only supports connecting to a single _Collector Service_
+instance. Because the default initial peers include a multicast address,
+more than one _Collector Service_ instance on the network may be discovered.
+If that happens, _Monitoring Library 2.0_ will print a warning:
+_Multiple active Collector Services detected._ To avoid this situation,
+set ``collector_initial_peers`` to the unicast address of the specific _Collector
+Service_ instance you want to connect to.
 
 In WAN profiles, _Collector Service_ uses _RTI Real-Time WAN Transport_ to 
 receive telemetry data from _Connext_ applications and runs on a WAN. For 
@@ -142,7 +162,7 @@ environment variable ``CFG_NAME`` to "SecureLAN".
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e CFG_NAME="SecureLAN" \
         --name=collector_service \
         rticom/collector-service:latest
@@ -165,11 +185,11 @@ set using environment variables when running the Docker container:
 **General Parameters**
 
 ```
--e OBSERVABILITY_DOMAIN=<The domain ID in which Collector Service receives the telemetry data from _Connext_ applications or from another Collector Service instance. default: 2>
+-e OBSERVABILITY_DOMAIN=<The domain ID in which Collector Service receives the telemetry data from Connext applications or from another Collector Service instance. default: 101>
 -e OBSERVABILITY_CONTROL_PORT=<The private TCP port to access the Collector Service control server for external commands and to distribute non-metric data for Admin Console remote debugging. This is the port the service listens to. default: 19098>
 -e OBSERVABILITY_CONTROL_PUBLIC_HOSTNAME=<The public hostname to access the Collector Service control server from a public network. default: localhost>
 -e OBSERVABILITY_CONTROL_PUBLIC_PORT=<The public TCP port to access the Collector Service control server from a public network. default: 19098>
--e OBSERVABILITY_OUTPUT_DOMAIN=<The domain ID in which Collector Service forwards the telemetry data to another Collector Service instance. default: 101>
+-e OBSERVABILITY_OUTPUT_DOMAIN=<The domain ID in which Collector Service forwards the telemetry data to another Collector Service instance. default: 102>
 -e OBSERVABILITY_OUTPUT_COLLECTOR_PEER=<The initial peer the Collector Service uses for discovery to send telemetry data to another Collector Service instance. default: builtin.udpv4://127.0.0.1>
 ```
 
@@ -183,6 +203,16 @@ set using environment variables when running the Docker container:
 The above parameters are used by the HTTP clients created by
 _Collector Service_ to send telemetry data to third-party backends (for example,
 Prometheus, Grafana Loki, and OpenTelemetry Collector).
+
+**Lightweight Security Parameters**
+
+```
+-e OBSERVABILITY_DDS_SECURITY_PSK_PROTECTION_KIND=<The value to be passed as dds.sec.access.rtps_psk_protection_kind for the Lightweight Builtin Security Plugins for the DDS receiver. default: ENCRYPT>
+-e OBSERVABILITY_DDS_SECURITY_PSK_CIPHER=<The value to be passed as dds.sec.crypto.rtps_psk_symmetric_cipher_algorithm for the Lightweight Builtin Security Plugins for the DDS receiver. default: AUTO>
+
+-e OBSERVABILITY_OUTPUT_DDS_SECURITY_PSK_PROTECTION_KIND=<The value to be passed as dds.sec.access.rtps_psk_protection_kind for the Lightweight Builtin Security Plugins for the DDS exporter. default: ENCRYPT>
+-e OBSERVABILITY_OUTPUT_DDS_SECURITY_PSK_CIPHER=<The value to be passed as dds.sec.crypto.rtps_psk_symmetric_cipher_algorithm for the Lightweight Builtin Security Plugins for the DDS exporter. default: AUTO>
+```
 
 **WAN Parameters**
 
@@ -220,7 +250,7 @@ follows:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e CFG_NAME="NonSecureWAN" \
         -e OBSERVABILITY_DOMAIN=33 \
         -e OBSERVABILITY_RWT_PUBLIC_ADDRESS=10.10.1.34 \
@@ -265,6 +295,7 @@ available to _Collector Service_.
 -v /path/to/private_key.pem:/rti/security/dds/private_key.pem
 -v /path/to/governance.p7s:/rti/security/dds/governance.p7s
 -v /path/to/permissions.p7s:/rti/security/dds/permissions.p7s
+-v /path/to/passphrase:/rti/security/dds/passphrase
 ```
 
 - _identity_ca.pem_ must contain the certificate of the CA that signed the
@@ -278,6 +309,8 @@ _permissions.p7s_ and _governance.p7s_.
 - _governance.p7s_ must contain the governance file of the _Collector Service_
 `receivers`.
 - _permissions.p7s_ must contain the permissions file of the _Collector Service_
+`receivers`.
+- _passphrase_ must contain the passphrase file of the _Collector Service_
 `receivers`.
 
 **To configure _RTI Security Plugins_ to send telemetry data to another _Collector Service_ instance while running in Forwarder mode:**
@@ -293,6 +326,7 @@ be made available to _Collector Service_.
 -v /path/to/private_key_output.pem:/rti/security/dds/private_key_output.pem
 -v /path/to/governance_output.p7s:/rti/security/dds/governance_output.p7s
 -v /path/to/permissions_output.p7s:/rti/security/dds/permissions_output.p7s
+-v /path/to/passphrase_output:/rti/security/dds/passphrase_output
 ```
 
 - _identity_ca_output.pem_ must contain the certificate of the CA that signed the
@@ -307,9 +341,37 @@ _permissions_output.p7s_ and _governance_output.p7s_.
 `exporters`.
 - _permissions_output.p7s_ must contain the permissions file of the _Collector Service_
 `exporters`.
+- _passphrase_output_ must contain the passphrase file of the _Collector Service_
+`exporters`.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
+
+**To configure _RTI Lightweight Security Plugins_ to receive telemetry data from _Connext_ applications or another _Collector Service_ instance running in Forwarder mode:**
+
+_RTI Lightweight Security Plugins_ must be configured on _Collector Service_ `receivers`
+for all secure configurations. The following security artifacts must be made
+available to _Collector Service_.
+
+```
+-v /path/to/passphrase:/rti/security/dds/passphrase
+```
+
+- _passphrase_ must contain the passphrase file of the _Collector Service_
+`receivers`.
+
+**To configure _RTI Lightweight Security Plugins_ to send telemetry data to another _Collector Service_ instance while running in Forwarder mode:**
+
+_RTI Lightweight Security Plugins_ must be configured on _Collector Service_ `exporters`
+for all secure Forwarder configurations. The following security artifacts must
+be made available to _Collector Service_.
+
+```
+-v /path/to/passphrase_output:/rti/security/dds/passphrase_output
+```
+
+- _passphrase_output_ must contain the passphrase file of the _Collector Service_
+`exporters`.
 
 **To configure HTTPS + Basic Authentication:**
 
@@ -342,21 +404,27 @@ To configure HTTPS + Basic Authentication, you need to provide:
   commands from external clients such as the Grafana dashboards running in your
   browser.
 - _htdigest_control_ is a password file that contains the username and password
-  for BASIC-Auth. This file is used by the Controllability HTTP server started by _Collector Service_
-  to authenticate the HTTP connections created by external clients (for example, to change the verbosity
-  of an application). The htdigest file can be created using the
-  [Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
-- _htdigest_prometheus_ is a password file that contains the username and password
-  for BASIC-Auth. This file is used by the Prometheus HTTP server started by _Collector Service_
-  to authenticate the HTTP connections created by external clients (for example, a Prometheus scraping request). The htdigest file can be created using the
-  [Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
+  for Basic Authentication. This file is used by the Controllability HTTP server
+  started by _Collector Service_ to authenticate the HTTP connections created by
+  external clients (for example, to change the verbosity of an application). The
+  htdigest file can be created using the [Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
+- _htdigest_prometheus_ is a password file that contains the username and
+  password for Basic Authentication. This file is used by the Prometheus HTTP
+  server started by _Collector Service_ to authenticate the HTTP connections
+  created by external clients (for example, a Prometheus scraping request). The
+  htdigest file can be created using the [Apache htdigest tool](https://httpd.apache.org/docs/2.4/programs/htdigest.html).
+
+**Note:** The username and password fields use HTTP Basic Authentication
+(backed by an ``htdigest`` file), which has inherent security limitations. This
+mechanism is intended for **evaluation use only**. For production deployments,
+RTI strongly recommends running an authenticating reverse proxy.
 
 Depending on your security configuration, you may not need to provide all the
 files listed above. For example, if you are not running OpenTelemetry Collector,
 you do not need to provide _rootCAOtel.crt_.
 
 For additional information on how to generate these security artifacts, see
-[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
+[Generating the Observability Framework Security Artifacts](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/observability/security.html#generating-the-observability-framework-security-artifacts).
 
 ## Remote debugging configuration for Admin Console
 
@@ -367,6 +435,8 @@ debugging feature.
 
 - NonSecureRemoteDebuggingLAN
 - NonSecureRemoteDebuggingWAN
+- LWSecureRemoteDebuggingLAN
+- LWSecureRemoteDebuggingWAN
 - SecureRemoteDebuggingLAN
 - SecureRemoteDebuggingWAN
 
@@ -376,7 +446,7 @@ securely over WAN:
 ```
 docker run -dt --rm \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -v /path/to/serverControl.pem:/rti/security/https/serverControl.pem \
         -v /path/to/htdigest_control:/rti/security/https/htdigest_control \
         -e OBSERVABILITY_CONTROL_PUBLIC_HOSTNAME="public-hostname" \
@@ -394,7 +464,7 @@ non-securely over LAN:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e OBSERVABILITY_CONTROL_PUBLIC_HOSTNAME="public-hostname" \
         -e OBSERVABILITY_HOSTNAME="hostname" \
         -e OBSERVABILITY_CONTROL_PORT="19098" \
@@ -413,6 +483,9 @@ _Collector Service_ instance.
 - NonSecureForwarderLANtoLAN
 - NonSecureForwarderLANtoWAN
 - NonSecureForwarderWANtoWAN
+- LWSecureForwarderLANtoLAN
+- LWSecureForwarderLANtoWAN
+- LWSecureForwarderWANtoWAN
 - SecureForwarderLANtoLAN
 - SecureForwarderLANtoWAN
 - SecureForwarderWANtoWAN
@@ -426,19 +499,21 @@ The following example runs _Collector Service_:
 ```
 docker run -dt --rm \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -v /path/to/identity_ca.pem:/rti/security/dds/identity_ca.pem \
         -v /path/to/permissions_ca.pem:/rti/security/dds/permissions_ca.pem \
         -v /path/to/identity_certificate.pem:/rti/security/dds/identity_certificate.pem \
         -v /path/to/private_key.pem:/rti/security/dds/private_key.pem \
         -v /path/to/governance.p7s:/rti/security/dds/governance.p7s \
         -v /path/to/permissions.p7s:/rti/security/dds/permissions.p7s \
+        -v /path/to/passphrase:/rti/security/dds/passphrase
         -v /path/to/identity_ca_output.pem:/rti/security/dds/identity_ca_output.pem \
         -v /path/to/permissions_ca_output.pem:/rti/security/dds/permissions_ca_output.pem \
         -v /path/to/identity_certificate_output.pem:/rti/security/dds/identity_certificate_output.pem \
         -v /path/to/private_key_output.pem:/rti/security/dds/private_key_output.pem \
         -v /path/to/governance_output.p7s:/rti/security/dds/governance_output.p7s \
         -v /path/to/permissions_output.p7s:/rti/security/dds/permissions_output.p7s \
+        -v /path/to/passphrase_output:/rti/security/dds/passphrase_output
         -e OBSERVABILITY_DOMAIN=100 \
         -e OBSERVABILITY_OUTPUT_DOMAIN=101 \
         -e OBSERVABILITY_OUTPUT_COLLECTOR_PEER="udpv4_wan://50.10.23.45:16000" \
@@ -456,7 +531,7 @@ The following example runs _Collector Service_:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e OBSERVABILITY_DOMAIN=100 \
         -e OBSERVABILITY_OUTPUT_DOMAIN=101 \
         -e OBSERVABILITY_OUTPUT_COLLECTOR_PEER="builtin.udpv4://50.10.23.45" \
@@ -476,7 +551,7 @@ To provide your own configuration, follow these steps when running the container
 
 - bind-mount your configuration file (for example, MyCollectorService.xml) from the host
   into the following location in the Docker container:
-  `/home/rtiuser/rti_workspace/7.6.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml`
+  `/home/rtiuser/rti_workspace/7.7.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml`
 - select the _Collector Service_ configuration in the configuration file by
   setting the `CFG_NAME` environment variable
 
@@ -485,8 +560,8 @@ For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
         -e CFG_NAME="MyCollectorService" \
         --name=collector_service \
         rticom/collector-service:latest
@@ -500,8 +575,8 @@ them to the end of the `docker run` command. For example:
 ```
 docker run -dt \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
-        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.6.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
+        -v $PWD/MyCollectorService.xml:/home/rtiuser/rti_workspace/7.7.0/user_config/collector_service/USER_COLLECTOR_SERVICE.xml \
         -e CFG_NAME="MyCollectorService" \
         --name=collector_service \
         rticom/collector-service:latest \
@@ -524,18 +599,23 @@ The previous examples use the `--network host` parameter to run the containers i
 
 If you want to run the containers in a custom network isolated from the host network, you can create a custom network using `docker network create` and run the containers in that network. See the [Docker networking overview documentation](https://docs.docker.com/network/) for more information on Docker networks.
 
-If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [RTI Real-Time WAN Transport documentation](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
+If you want to make the containers accessible from outside the Docker environment without using the host network, the recommendation is to use _RTI Real-Time WAN Transport_ and expose the necessary UDP ports using the `-p` option. For more information on _RTI Real-Time WAN Transport_, refer to the [RTI Real-Time WAN Transport documentation](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/PartRealtimeWAN.htm). For more information on the `-p` option, refer to the [Docker running containers documentation](https://docs.docker.com/engine/reference/run/#expose-incoming-ports).
 
 The following built-in configuration profiles use _RTI Real-Time WAN Transport_:
 - NonSecureForwarderLANtoWAN
 - NonSecureForwarderWANtoWAN
+- LWSecureForwarderLANtoWAN
+- LWSecureForwarderWANtoWAN
 - SecureForwarderLANtoWAN
 - SecureForwarderWANtoWAN
-- SecureWAN
 - NonSecureWAN
-- SecureOTelWAN
+- SecureWAN
+- LWSecureWAN
 - NonSecureOTelWAN
+- LWSecureOTelWAN
+- SecureOTelWAN
 - NonSecureRemoteDebuggingWAN
+- LWSecureRemoteDebuggingWAN
 - SecureRemoteDebuggingWAN
 
 For example, to run _Collector Service_ in non-host network mode and make it accessible from outside the Docker environment using _RTI Real-Time WAN Transport_, you can run a Docker container as follows:
@@ -544,7 +624,7 @@ For example, to run _Collector Service_ in non-host network mode and make it acc
 docker run -dt --rm \
         -p 30000:30000/udp \
         -p 19098:19098 \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e CFG_NAME="NonSecureWAN" \
         -e OBSERVABILITY_DOMAIN=33 \
         -e OBSERVABILITY_RWT_PUBLIC_ADDRESS="<public-hostname-or-ip>" \
@@ -583,7 +663,7 @@ with the `--platform linux/amd64` parameter. For example:
 docker run -dt \
         --platform linux/amd64 \
         --network host \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         --name=collector_service \
         rticom/collector-service:latest
 ```
@@ -602,7 +682,7 @@ Here is an example of how to run _Collector Service_ in WSL2 using mirrored netw
 docker run -dt --rm \
         -p 30000:30000/udp \
         -p 19098:19098 \
-        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.6.0/rti_license.dat \
+        -v $PWD/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat \
         -e CFG_NAME="NonSecureWAN" \
         -e OBSERVABILITY_DOMAIN=33 \
         -e OBSERVABILITY_RWT_PUBLIC_ADDRESS="<public-hostname-or-ip>" \
@@ -696,7 +776,7 @@ Follow the steps below to enable _Monitoring Library 2.0_, then install and conf
             </participant_factory_qos>
 
     The profile containing the snippet must have _is_default_participant_factory_profile_ set to true.
-    For more information on configuring _Monitoring Library 2.0_ see [MONTORING QosPolicy](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/users_manual/users_manual/MONITORING_QosPolicy.htm).
+    For more information on configuring _Monitoring Library 2.0_ see [MONTORING QosPolicy](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/users_manual/users_manual/MONITORING_QosPolicy.htm).
 
     The following example is a complete profile:
 
@@ -724,7 +804,7 @@ Follow the steps below to enable _Monitoring Library 2.0_, then install and conf
                  </dds>
 
 2.  Install the appropriate _Connext_ target package for your architecture, as described in the
-    [RTI Connext Installation Guide](https://community.rti.com/static/documentation/connext-dds/7.6.0/doc/manuals/connext_dds_professional/installation_guide/installing.html).
+    [RTI Connext Installation Guide](https://community.rti.com/static/documentation/connext-dds/7.7.0/doc/manuals/connext_dds_professional/installation_guide/installing.html).
 
 3.  After the target package is installed, configure your system so that the RTI services can load the library.
     This can be done in one of two ways, as shown below. Only one of the following methods is required.
@@ -774,10 +854,10 @@ You can find the Software Bill of Materials (SBOM) third-party information in SP
 
 Additional third party information can be found at https://community.rti.com/documentation#doc_third_party.
 
-Use the following command to retrieve the _RTI_License_Agreement.pdf_ built-in file:
+Use the following command to retrieve the _RTI_License_Agreement_LM.pdf_ built-in file:
 
 ```
-docker cp collector_service:/opt/rti.com/rti_connext_dds-7.6.0/RTI_License_Agreement.pdf .
+docker cp collector_service:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
 ```
 
 ## How to get a license file
@@ -790,7 +870,7 @@ If you are an RTI customer, and you need an RTI Connext license file, contact [R
 
 ### Evaluators
 
-If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.6.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
+If you are not an RTI customer, visit https://www.rti.com/free-trial/connext to get an RTI Connext free trial for release 7.7.0 or higher. With the free trial you will receive a limited time license file that contains an activation key for RTI Connext Professional, RTI Security Plugins, RTI Real-Time WAN Transport, and RTI Cloud Discovery Service.
 
 To get a free trial license for earlier releases, contact evaluations@rti.com.
 
