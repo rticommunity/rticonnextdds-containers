@@ -1,0 +1,30 @@
+services:
+  ui-tools:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-ui-tools:${CONNEXT_VERSION:-7.7.0}
+    platform: linux/amd64
+    shm_size: 1gb
+    ports:
+      - "127.0.0.1:${UI_RDP_PORT:-3389}:3389"
+    environment:
+      UI_PASSWORD_FILE: /run/secrets/ui_password
+    secrets:
+      - ui_password
+    volumes:
+      - type: bind
+        source: ${RTI_LICENSE_FILE_HOST:?Set an absolute license file path}
+        target: /licenses/rti_license.dat
+        read_only: true
+        bind:
+          create_host_path: false
+      - ui-home:/home/user
+    networks:
+      - dds
+secrets:
+  ui_password:
+    file: ${UI_PASSWORD_FILE_HOST:?Set an absolute password file path}
+volumes:
+  ui-home:
+networks:
+  dds:
+    external: true
+    name: ${CONNEXT_DOCKER_NETWORK:?Set the existing application network name}

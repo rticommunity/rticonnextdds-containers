@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=RTI Admin Console
+Exec=/usr/local/bin/admin-console
+Terminal=false
+Categories=Development;

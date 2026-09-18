@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+if command -v rtienv >/dev/null 2>&1; then
+    if [ -n "${RTI_LICENSE_FILE:-}" ] && [ -f "${RTI_LICENSE_FILE}" ]; then
+        eval "$(rtienv -l "${RTI_LICENSE_FILE}")"
+    else
+        eval "$(rtienv)"
+    fi
+fi
+
+if [ "$#" -eq 0 ]; then
+    set -- bash
+fi
+
+exec "$@"

@@ -1,0 +1,112 @@
+services:
+  generate:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-sdk:${CONNEXT_VERSION:-7.7.0}
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "0:0"
+    volumes:
+      - hello-world-build:/work
+      - type: bind
+        source: ../../
+        target: /repo
+        read_only: true
+    command:
+      - bash
+      - -ec
+      - |
+        cp /repo/resources/idls/HelloWorld.idl /work/HelloWorld.idl
+        /repo/resources/scripts/build-connext-example.sh C /work
+
+  subscriber-one:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-c-runtime:${CONNEXT_VERSION:-7.7.0}
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    tty: true
+    depends_on:
+      generate:
+        condition: service_completed_successfully
+    environment:
+      RTI_LICENSE_FILE: /licenses/rti_license.dat
+    volumes:
+      - hello-world-build:/work:ro
+      - type: bind
+        source: ${RTI_LICENSE_FILE_HOST:?Set an absolute RTI license file path}
+        target: /licenses/rti_license.dat
+        read_only: true
+        bind:
+          create_host_path: false
+    command: ["bash", "-lc", "cd /work/build/c && exec ./objs/$${CONNEXTDDS_ARCH}/HelloWorld_subscriber"]
+
+  subscriber-two:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-c-runtime:${CONNEXT_VERSION:-7.7.0}
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    tty: true
+    depends_on:
+      generate:
+        condition: service_completed_successfully
+    environment:
+      RTI_LICENSE_FILE: /licenses/rti_license.dat
+    volumes:
+      - hello-world-build:/work:ro
+      - type: bind
+        source: ${RTI_LICENSE_FILE_HOST:?Set an absolute RTI license file path}
+        target: /licenses/rti_license.dat
+        read_only: true
+        bind:
+          create_host_path: false
+    command: ["bash", "-lc", "cd /work/build/c && exec ./objs/$${CONNEXTDDS_ARCH}/HelloWorld_subscriber"]
+
+  publisher:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-c-runtime:${CONNEXT_VERSION:-7.7.0}
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    tty: true
+    depends_on:
+      generate:
+        condition: service_completed_successfully
+    environment:
+      RTI_LICENSE_FILE: /licenses/rti_license.dat
+    volumes:
+      - hello-world-build:/work:ro
+      - type: bind
+        source: ${RTI_LICENSE_FILE_HOST:?Set an absolute RTI license file path}
+        target: /licenses/rti_license.dat
+        read_only: true
+        bind:
+          create_host_path: false
+    command:
+      - bash
+      - -lc
+      - >-
+        cd /work/build/c && while true; do
+        ./objs/$${CONNEXTDDS_ARCH}/HelloWorld_publisher; sleep 2;
+        done
+
+  admin-console:
+    image: ${IMAGE_TAG_PREFIX:-local}/connext-ui-tools:${CONNEXT_VERSION:-7.7.0}
+    platform: linux/amd64
+    shm_size: 1gb
+    depends_on:
+      generate:
+        condition: service_completed_successfully
+    ports:
+      - "127.0.0.1:${UI_RDP_PORT:-3389}:3389"
+    environment:
+      UI_PASSWORD_FILE: /run/secrets/ui_password
+      SERVICE_XRDP_BOOTSTRAP_ENABLED: "true"
+      RTI_LICENSE_FILE: /licenses/rti_license.dat
+    secrets:
+      - ui_password
+    volumes:
+      - type: bind
+        source: ${RTI_LICENSE_FILE_HOST:?Set an absolute RTI license file path}
+        target: /licenses/rti_license.dat
+        read_only: true
+        bind:
+          create_host_path: false
+      - ui-home:/home/user
+
+secrets:
+  ui_password:
+    file: ${UI_PASSWORD_FILE_HOST:-./ui-password.txt}
+
+volumes:
+  hello-world-build:
+  ui-home:
