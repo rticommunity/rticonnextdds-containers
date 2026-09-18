@@ -1,45 +1,64 @@
-# RTI Connext Containers
+# RTI Connext Container Images Documentation
 
-Documentation for RTI-published container images and public Dockerfiles for
-images that users build themselves. A documented image does not necessarily
-have a public Dockerfile, and a public Dockerfile does not imply that RTI
-distributes the resulting image.
+Welcome to the official repository for [RTI Connext Container Images](https://hub.docker.com/u/rticom). This repository contains the documentation for all available container images provided by RTI and their respective tags.
 
-## Catalog
+## Overview
 
-Availability below applies to this `release/7.7.0` line. Registry links lead to
-RTI's published images; `local/...` tags in build examples are local outputs,
-not images to pull from Docker Hub. "Not provided" in the Dockerfile column
-means that this repository does not contain the Dockerfile for that image.
+Each container image provided by RTI is designed to help you quickly and efficiently deploy and run your applications in a containerized environment.
 
-| Image or family | Prebuilt image | Public Dockerfile | Documentation |
+### Documentation
+
+You can find the documentation for a specific image and version by navigating to the appropriate directory under the `doc/` folder.
+
+> **Note:** The documentation shown on DockerHub and in the `main` branch of this repository refers to the `latest` tag for each image, which corresponds to the most recent image released by RTI. For specific tag documentation, refer to the appropriate tag in this repository.
+
+### Quick Links
+
+- **DockerHub Repository**: [RTI Community on DockerHub](https://hub.docker.com/u/rticom)
+- **RTI Connext Documentation**: [RTI Documentation Portal](https://community.rti.com/documentation)
+
+## RTI-published images
+
+The following images are distributed by RTI through Docker Hub. Their documentation
+is maintained in this repository, but their Dockerfiles are not provided here.
+
+| Image | Docker Hub | Documentation |
+| --- | --- | --- |
+| cloud-discovery-service | [Image](https://hub.docker.com/r/rticom/cloud-discovery-service) | [Usage](doc/cloud-discovery-service/README.md) |
+| collector-service | [Image](https://hub.docker.com/r/rticom/collector-service) | [Usage](doc/collector-service/README.md) |
+| dds-ping | [Image](https://hub.docker.com/r/rticom/dds-ping) | [Usage](doc/dds-ping/README.md) |
+| dds-spy | [Image](https://hub.docker.com/r/rticom/dds-spy) | [Usage](doc/dds-spy/README.md) |
+| perftest | [Image](https://hub.docker.com/r/rticom/perftest) | [Usage](doc/perftest/README.md) |
+| persistence-service | [Image](https://hub.docker.com/r/rticom/persistence-service) | [Usage](doc/persistence-service/README.md) |
+| recording-service | [Image](https://hub.docker.com/r/rticom/recording-service) | [Usage](doc/recording-service/README.md) |
+| replay-service | [Image](https://hub.docker.com/r/rticom/replay-service) | [Usage](doc/replay-service/README.md) |
+| routing-service | [Image](https://hub.docker.com/r/rticom/routing-service) | [Usage](doc/routing-service/README.md) |
+| web-integration-service | [Image](https://hub.docker.com/r/rticom/web-integration-service) | [Usage](doc/web-integration-service/README.md) |
+
+## Public Dockerfiles
+
+To avoid redistributing third-party packages from RTI, this repository also
+provides Dockerfiles that users can build on their own systems. These builds do
+not produce images published by RTI and are separate from the Docker Hub images
+listed above.
+
+| Image | Docker Hub image | Dockerfile | Documentation |
 | --- | --- | --- | --- |
-| cloud-discovery-service | [Docker Hub](https://hub.docker.com/r/rticom/cloud-discovery-service) | Not provided | [Usage](doc/cloud-discovery-service/README.md) |
-| collector-service | [Docker Hub](https://hub.docker.com/r/rticom/collector-service) | Not provided | [Usage](doc/collector-service/README.md) |
-| dds-ping | [Docker Hub](https://hub.docker.com/r/rticom/dds-ping) | Not provided | [Usage](doc/dds-ping/README.md) |
-| dds-spy | [Docker Hub](https://hub.docker.com/r/rticom/dds-spy) | Not provided | [Usage](doc/dds-spy/README.md) |
-| perftest | [Docker Hub](https://hub.docker.com/r/rticom/perftest) | Not provided | [Usage](doc/perftest/README.md) |
-| persistence-service | [Docker Hub](https://hub.docker.com/r/rticom/persistence-service) | Not provided | [Usage](doc/persistence-service/README.md) |
-| recording-service | [Docker Hub](https://hub.docker.com/r/rticom/recording-service) | Not provided | [Usage](doc/recording-service/README.md) |
-| replay-service | [Docker Hub](https://hub.docker.com/r/rticom/replay-service) | Not provided | [Usage](doc/replay-service/README.md) |
-| routing-service | [Docker Hub](https://hub.docker.com/r/rticom/routing-service) | Not provided | [Usage](doc/routing-service/README.md) |
-| web-integration-service | [Docker Hub](https://hub.docker.com/r/rticom/web-integration-service) | Not provided | [Usage](doc/web-integration-service/README.md) |
 | Connext SDK | Not provided; build locally | [Dockerfile](docker/connext-sdk/Dockerfile) | [Build and usage](doc/connext-sdk/README.md) |
 | Connext Runtime and language variants | Not provided; build locally | [Dockerfile](docker/connext-runtime/Dockerfile) | [Build and usage](doc/connext-runtime/README.md) |
 | Connext UI Tools | Not provided; build locally | [Dockerfile](docker/connext-ui-tools/Dockerfile) | [Build and RDP](doc/connext-ui-tools/README.md) |
 
-## Build Locally
-
-Install Docker with Buildx/Bake. Run commands from the repository root:
+Install Docker with Buildx/Bake and run these commands from the repository root:
 
 ```sh
 docker buildx bake --load                  # SDK and complete Runtime
 docker buildx bake --load all              # SDK, Runtime variants and UI Tools
 ```
 
-Bake only builds images with Dockerfiles in this repository. It does not build
-or publish the other images in the catalog. See [build configuration](doc/building.md)
-for tags, language selection, platforms and installation options.
+Bake only builds the public Dockerfile targets in this repository. It does not
+build or publish the RTI-published images in the previous section. See
+[Build configuration](doc/building.md) for tags, language selection, platforms
+and installation options.
 
 For a publisher, two subscribers and Admin Console on one Docker network, see
 the [HelloWorld Compose example](examples/hello_world/README.md). For local and
