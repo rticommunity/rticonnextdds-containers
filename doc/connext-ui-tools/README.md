@@ -4,11 +4,10 @@
 no prebuilt image provided here. Run commands from the repository root.
 See [build configuration](../building.md).
 
-All RTI Connext 7.7.0 tools from the public APT `tools-all` package: Admin
-Console, Launcher, Monitor, Shapes Demo, System Designer and CLI tools.
-The image includes an Xfce desktop and XRDP, separate from SDK and Runtime.
-It retains all dependencies declared by RTI, including development components
-pulled in by `tools-all`; it is not a slim runtime image.
+The image copies the RTI Connext 7.7.0 UI tools from the public
+`rticom/connext-base:7.7.0` image: Admin Console, Launcher, Monitor, Shapes
+Demo, System Designer and CLI tools. The image includes an Xfce desktop and
+XRDP, separate from SDK and Runtime. It is not a slim runtime image.
 Only Linux amd64 is supported by this target. Other host architectures require
 Docker platform emulation.
 

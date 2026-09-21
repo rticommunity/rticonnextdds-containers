@@ -37,6 +37,7 @@ target "ui-tools" {
   tags = ["${IMAGE_TAG_PREFIX}/connext-ui-tools:${CONNEXT_VERSION}${IMAGE_TAG_SUFFIX != "" ? "-${IMAGE_TAG_SUFFIX}" : ""}"]
   args = {
     CONNEXT_VERSION = CONNEXT_VERSION
+    CONNEXT_BASE_IMAGE = BASE_IMAGE
   }
 }
 

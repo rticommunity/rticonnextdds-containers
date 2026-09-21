@@ -40,7 +40,7 @@ docker buildx bake --load runtime-all \
 ## Configuration
 
 [docker-bake.hcl](../docker-bake.hcl) defines `CONNEXT_VERSION` (default `7.7.0`),
-`BASE_IMAGE` (Ubuntu 24.04), `DOCKER_PLATFORM` (default `linux/amd64`),
+`BASE_IMAGE` (`rticom/connext-base:7.7.0`), `DOCKER_PLATFORM` (default `linux/amd64`),
 `IMAGE_TAG_PREFIX` (default `local`) and optional `IMAGE_TAG_SUFFIX`.
 Override these variables through the environment or a Bake override file.
 
@@ -48,22 +48,22 @@ SDK and Runtime support `linux/amd64` and `linux/arm64`; an emulated build needs
 Docker platform emulation. UI Tools and its RDP test client are amd64-only and
 ignore `DOCKER_PLATFORM`. UI Tools uses its own digest-pinned desktop base.
 
-The SDK/Runtime Dockerfiles also accept `CONNEXT_APT_PACKAGES`, user UID/GID,
-`DOTNET_VERSION` and `RTI_CONNEXT_PYTHON_PACKAGE_VERSION`. Changing language
-runtime versions requires compatible examples; C# tests currently target .NET 10.
+The SDK/Runtime Dockerfiles also accept `DOTNET_VERSION` and
+`RTI_CONNEXT_PYTHON_PACKAGE_VERSION`. Changing language runtime versions requires
+compatible examples; C# tests currently target .NET 10.
 
 ## Installation
 
-[install-connext.sh](../resources/scripts/install-connext.sh) selects packages
-for `sdk`, `runtime` or `ui-tools`. Language dependencies are installed by
-[install-language-dependencies.sh](../resources/scripts/install-language-dependencies.sh).
-For this release, builds use APT Connext `7.7.0.0` packages named `7.7.0`.
-Setting a different version does not guarantee that corresponding packages exist.
-The `run-installer` method is a placeholder and fails explicitly; `.run` and
-`.rtipkg` support is not part of this migration.
+The SDK, Runtime and UI Tools Dockerfiles copy Connext from the public
+`rticom/connext-base:7.7.0` image. Runtime content is pruned before it is copied
+into a clean Ubuntu image; UI Tools content is pruned before it is copied into
+the desktop image. Language and desktop dependencies are installed from their
+respective official package repositories by
+[install-language-dependencies.sh](../resources/scripts/install-language-dependencies.sh)
+and the UI Dockerfile.
 
 Builds accept RTI's license agreement for unattended installation. A license
 file for application execution must remain external and be mounted read-only.
-APT dependencies can change over time. Build metadata provides traceability,
+Build dependencies can change over time. Build metadata provides traceability,
 not a complete dependency lock. Pin reviewed base images and package versions
 when exact reproduction is required, and update pins for security fixes.

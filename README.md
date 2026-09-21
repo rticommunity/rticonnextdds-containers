@@ -66,11 +66,12 @@ Jenkins validation, see [Testing and CI](tests/README.md).
 
 ## Versions and Licensing
 
-The public Dockerfiles on this release line default to Connext `7.7.0`, using
-the APT packages for `7.7.0.0`. [VERSION](VERSION) records that build baseline,
-not the version of every image in the catalog. It is not read automatically by
-Bake. Each published image's documentation and registry tags describe its own
-available versions. A `latest` registry tag can move independently of this branch.
+The public Dockerfiles on this release line default to the public
+`rticom/connext-base:7.7.0` image as their Connext source. [VERSION](VERSION)
+records the repository build baseline, not the version of every image in the
+catalog. It is not read automatically by Bake. Each published image's
+documentation and registry tags describe its own available versions. A
+`latest` registry tag can move independently of this branch.
 
 Existing release branches and Git tags retain version-specific documentation.
 No older tag is changed by adding these Dockerfiles. The `doc/` paths remain

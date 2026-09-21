@@ -1,22 +1,32 @@
 # syntax=docker/dockerfile:1.7
 ARG UI_BASE_IMAGE=hectorm/xubuntu@sha256:635fe60c65aa35fc8330d886cc06754bda924f3c799754d90eb5e1d99e3319e9
-FROM ${UI_BASE_IMAGE}
+ARG CONNEXT_BASE_IMAGE=rticom/connext-base:7.7.0
+
+FROM --platform=linux/amd64 ${CONNEXT_BASE_IMAGE} AS connext-base
+
+ARG CONNEXT_VERSION=7.7.0
+ENV NDDSHOME=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}
+
+USER root
+COPY --chmod=0755 resources/scripts/prune-connext.sh /usr/local/sbin/prune-connext
+RUN prune-connext ui-tools
+
+FROM --platform=linux/amd64 ${UI_BASE_IMAGE}
 
 ARG TARGETARCH
 ARG CONNEXT_VERSION=7.7.0
-ARG CONNEXT_INSTALL_METHOD=apt
 ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
-    CONNEXT_INSTALL_METHOD=${CONNEXT_INSTALL_METHOD} \
     NDDSHOME=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} \
     RTI_LICENSE_FILE=/licenses/rti_license.dat
 
 USER root
-COPY --chmod=0755 resources/scripts/install-connext.sh /usr/local/sbin/install-connext
+COPY --from=connext-base /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}
+COPY resources/scripts/rtientrypoint /usr/local/bin/rtientrypoint
 COPY --chmod=0755 docker/connext-ui-tools/entrypoint.sh /usr/local/bin/ui-tools-entrypoint
 COPY --chmod=0755 docker/connext-ui-tools/admin-console.sh /usr/local/bin/admin-console
 COPY docker/connext-ui-tools/admin-console.desktop /etc/xdg/autostart/admin-console.desktop
+COPY doc/connext-ui-tools/README.md /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/README.md
 RUN test "${TARGETARCH}" = amd64 \
-    && install-connext ui-tools \
     && apt-get update \
     && apt-get install -y --no-install-recommends x11-utils \
     && rm -rf /var/lib/apt/lists/* \
