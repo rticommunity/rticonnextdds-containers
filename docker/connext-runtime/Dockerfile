@@ -15,20 +15,16 @@ FROM --platform=${TARGETPLATFORM} ubuntu:24.04
 
 ARG CONNEXT_VERSION=7.7.0
 ARG CONNEXT_LANGUAGES=all
-ARG PREFIX=/opt/rti.com
 ARG DOTNET_VERSION=10.0
 ARG RTI_CONNEXT_PYTHON_PACKAGE_VERSION
-ARG RTI_LICENSE_AGREEMENT_ACCEPTED=accepted
 
 ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
     CONNEXT_LANGUAGES=${CONNEXT_LANGUAGES} \
-    PREFIX=${PREFIX} \
     DOTNET_VERSION=${DOTNET_VERSION} \
     RTI_CONNEXT_PYTHON_PACKAGE_VERSION=${RTI_CONNEXT_PYTHON_PACKAGE_VERSION} \
-    NDDSHOME=${PREFIX}/rti_connext_dds-${CONNEXT_VERSION} \
-    CONNEXTDDS_DIR=${PREFIX}/rti_connext_dds-${CONNEXT_VERSION} \
-    RTI_LICENSE_FILE=${PREFIX}/rti_connext_dds-${CONNEXT_VERSION}/rti_license.dat \
-    RTI_LICENSE_AGREEMENT_ACCEPTED=${RTI_LICENSE_AGREEMENT_ACCEPTED}
+    NDDSHOME=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} \
+    CONNEXTDDS_DIR=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} \
+    RTI_LICENSE_FILE=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/rti_license.dat
 
 COPY --from=connext-base /opt/rti.com/.env /opt/rti.com/.env
 COPY --from=connext-base /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}
@@ -50,7 +46,7 @@ USER rtiuser
 WORKDIR /home/rtiuser/rti_workspace
 
 SHELL ["/bin/bash", "-lc"]
-ENV VIRTUAL_ENV=${PREFIX}/python-venv
+ENV VIRTUAL_ENV=/opt/rti.com/python-venv
 ENV PATH="${VIRTUAL_ENV}/bin:${NDDSHOME}/bin:${PATH}"
 
 ENTRYPOINT ["/usr/local/bin/rtientrypoint"]
