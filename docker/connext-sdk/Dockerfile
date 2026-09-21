@@ -22,14 +22,15 @@ ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
     RTI_LICENSE_FILE=${PREFIX}/rti_connext_dds-${CONNEXT_VERSION}/rti_license.dat \
     RTI_LICENSE_AGREEMENT_ACCEPTED=${RTI_LICENSE_AGREEMENT_ACCEPTED}
 
+USER root
+
 COPY resources/scripts/install-language-dependencies.sh /usr/local/sbin/install-language-dependencies
 COPY resources/scripts/language-utils.sh /usr/local/sbin/language-utils.sh
-COPY resources/scripts/rtientrypoint /usr/local/bin/rtientrypoint
 
-RUN chmod +x /usr/local/sbin/install-language-dependencies /usr/local/bin/rtientrypoint \
+RUN chmod +x /usr/local/sbin/install-language-dependencies \
     && install-language-dependencies sdk all \
-    && groupadd --gid "${IMAGE_GID}" "${IMAGE_GROUP}" \
-    && useradd --uid "${IMAGE_UID}" --gid "${IMAGE_GID}" --create-home --shell /bin/bash "${IMAGE_USER}" \
+    && (getent group "${IMAGE_GROUP}" >/dev/null || groupadd --gid "${IMAGE_GID}" "${IMAGE_GROUP}") \
+    && (id -u "${IMAGE_USER}" >/dev/null 2>&1 || useradd --uid "${IMAGE_UID}" --gid "${IMAGE_GID}" --create-home --shell /bin/bash "${IMAGE_USER}") \
     && mkdir -p "/home/${IMAGE_USER}/rti_workspace/${CONNEXT_VERSION}" \
     && chown -R "${IMAGE_USER}:${IMAGE_GROUP}" "/home/${IMAGE_USER}" "${PREFIX}"
 
@@ -41,6 +42,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         net-tools \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --chmod=0755 resources/scripts/rtientrypoint /usr/local/bin/rtientrypoint
+
 USER ${IMAGE_USER}
 WORKDIR /home/${IMAGE_USER}/rti_workspace/${CONNEXT_VERSION}
 
@@ -48,5 +51,5 @@ SHELL ["/bin/bash", "-lc"]
 ENV VIRTUAL_ENV=${PREFIX}/python-venv
 ENV PATH="${VIRTUAL_ENV}/bin:${NDDSHOME}/bin:${PATH}"
 
-ENTRYPOINT ["rtientrypoint"]
+ENTRYPOINT ["/usr/local/bin/rtientrypoint"]
 CMD ["bash"]

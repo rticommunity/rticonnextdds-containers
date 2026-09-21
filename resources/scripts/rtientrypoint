@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
+if [ -z "${CONNEXTDDS_ARCH:-}" ]; then
+    case "$(uname -m)" in
+        x86_64) CONNEXTDDS_ARCH=x64Linux4gcc8.5.0 ;;
+        aarch64|arm64) CONNEXTDDS_ARCH=armv8Linux4gcc8.5.0 ;;
+        *)
+            printf 'Unsupported container architecture: %s\n' "$(uname -m)" >&2
+            exit 2
+            ;;
+    esac
+    export CONNEXTDDS_ARCH
+fi
+
+export LD_LIBRARY_PATH="${NDDSHOME}/lib/${CONNEXTDDS_ARCH}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+
 if command -v rtienv >/dev/null 2>&1; then
     if [ -n "${RTI_LICENSE_FILE:-}" ] && [ -f "${RTI_LICENSE_FILE}" ]; then
         eval "$(rtienv -l "${RTI_LICENSE_FILE}")"
