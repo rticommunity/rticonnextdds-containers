@@ -6,19 +6,8 @@ The SDK image is intended for building and debugging Connext applications.
 prebuilt image provided here. Run the commands below from the repository root.
 See [build configuration and platforms](../building.md).
 
-It installs Connext and all supported language build dependencies with:
-
-```text
-CONNEXT_INSTALL_METHOD=apt
-CONNEXT_VERSION=7.7.0
-```
-
-By default, the image installs the core Connext development packages:
-
-```text
-rti-connext-dds-7.7.0-lib-dev
-rti-connext-dds-7.7.0-rtiddsgen
-```
+It extends the public `rticom/connext-base:7.7.0` image with all supported
+language build dependencies.
 
 Language build dependencies are installed by `resources/scripts/install-language-dependencies.sh`.
 The SDK always installs all supported languages:
