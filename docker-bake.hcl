@@ -3,7 +3,7 @@ variable "CONNEXT_VERSION" {
 }
 
 variable "BASE_IMAGE" {
-  default = "ubuntu:24.04"
+  default = "rticom/connext-base:7.7.0"
 }
 
 variable "DOCKER_PLATFORM" {

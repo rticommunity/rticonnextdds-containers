@@ -12,7 +12,7 @@ pipeline {
         string(
             name: 'CONNEXT_VERSION',
             defaultValue: '7.7.0',
-            description: 'RTI Connext version to install from the public APT repository.'
+            description: 'Connext version used by the public base image and generated image tags.'
         )
         string(
             name: 'DOCKER_PLATFORM',

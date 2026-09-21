@@ -1,11 +1,9 @@
 # syntax=docker/dockerfile:1.7
 
-ARG BASE_IMAGE=ubuntu:24.04
+ARG BASE_IMAGE=rticom/connext-base:7.7.0
 FROM --platform=${TARGETPLATFORM} ${BASE_IMAGE}
 
 ARG CONNEXT_VERSION=7.7.0
-ARG CONNEXT_INSTALL_METHOD=apt
-ARG CONNEXT_APT_PACKAGES
 ARG PREFIX=/opt/rti.com
 ARG DOTNET_VERSION=10.0
 ARG RTI_CONNEXT_PYTHON_PACKAGE_VERSION
@@ -16,8 +14,6 @@ ARG IMAGE_GID=1010
 ARG RTI_LICENSE_AGREEMENT_ACCEPTED=accepted
 
 ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
-    CONNEXT_INSTALL_METHOD=${CONNEXT_INSTALL_METHOD} \
-    CONNEXT_APT_PACKAGES=${CONNEXT_APT_PACKAGES} \
     PREFIX=${PREFIX} \
     DOTNET_VERSION=${DOTNET_VERSION} \
     RTI_CONNEXT_PYTHON_PACKAGE_VERSION=${RTI_CONNEXT_PYTHON_PACKAGE_VERSION} \
@@ -26,13 +22,11 @@ ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
     RTI_LICENSE_FILE=${PREFIX}/rti_connext_dds-${CONNEXT_VERSION}/rti_license.dat \
     RTI_LICENSE_AGREEMENT_ACCEPTED=${RTI_LICENSE_AGREEMENT_ACCEPTED}
 
-COPY resources/scripts/install-connext.sh /usr/local/sbin/install-connext
 COPY resources/scripts/install-language-dependencies.sh /usr/local/sbin/install-language-dependencies
 COPY resources/scripts/language-utils.sh /usr/local/sbin/language-utils.sh
 COPY resources/scripts/rtientrypoint /usr/local/bin/rtientrypoint
 
-RUN chmod +x /usr/local/sbin/install-connext /usr/local/sbin/install-language-dependencies /usr/local/bin/rtientrypoint \
-    && install-connext sdk \
+RUN chmod +x /usr/local/sbin/install-language-dependencies /usr/local/bin/rtientrypoint \
     && install-language-dependencies sdk all \
     && groupadd --gid "${IMAGE_GID}" "${IMAGE_GROUP}" \
     && useradd --uid "${IMAGE_UID}" --gid "${IMAGE_GID}" --create-home --shell /bin/bash "${IMAGE_USER}" \
