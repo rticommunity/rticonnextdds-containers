@@ -4,12 +4,10 @@ The Runtime image is intended for running Connext applications. It extends the
 public `rticom/connext-base:7.7.0` image and installs only the language
 runtime dependencies required by an application.
 
-**Availability:** public [Dockerfile](../../docker/connext-runtime/Dockerfile),
-no prebuilt images provided here. Run commands from the repository root.
-See [all variant tags and build options](../building.md).
+Use the public [Dockerfile](../../docker/connext-runtime/Dockerfile) from the
+repository root. See [all variant tags and build options](../building.md).
 
-Language runtime dependencies are installed by
-`resources/scripts/install-language-dependencies.sh`. Supported language profiles are:
+Supported language profiles are:
 
 ```text
 all
@@ -23,21 +21,18 @@ python
 Build:
 
 ```sh
-docker buildx build --load \
-  --file docker/connext-runtime/Dockerfile \
-  --tag local/connext-runtime:7.7.0 \
-  .
+docker buildx bake --load runtime-all
 ```
 
 Build a smaller C/C++ Runtime image:
 
 ```sh
-docker buildx build --load \
-  --file docker/connext-runtime/Dockerfile \
-  --tag local/connext-cpp-runtime:7.7.0 \
-  --build-arg CONNEXT_LANGUAGES=cpp \
-  .
+docker buildx bake --load runtime-cpp
 ```
+
+The resulting tags are `local/connext-runtime:7.7.0` and
+`local/connext-cpp-runtime:7.7.0`. See [build configuration](../building.md)
+for every Runtime profile and custom combinations.
 
 Run:
 

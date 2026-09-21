@@ -11,8 +11,8 @@ From the repository root:
 ./resources/automation/ci/ci-run.sh
 ```
 
-This validates the repository, Bake configuration, image builds, and generated
-examples. It does not run DDS applications without a license.
+This validates the repository, Bake configuration, image builds and generated
+examples. It runs publisher/subscriber communication when a license is supplied.
 
 To run the Runtime and Admin Console integration tests, provide a readable RTI
 license file outside the repository:
@@ -57,11 +57,9 @@ ports must be reachable from the runner.
 | IMAGE_TAG_SUFFIX | generated timestamp | Override with a unique value for concurrent jobs |
 | PYTHON_TEST_BIN | project venv | Interpreter with pytest and pexpect |
 
-Only builds for the public Dockerfiles are tested; the prebuilt-only catalog
-entries are not part of the build matrix. Reports are stored in `reports/` and
-are not committed. Jenkins uses the same scripts, archives logs and JUnit XML,
-and does not publish images. Its license credential is configured as described
-in [the Jenkins setup](../resources/automation/README.md).
+Reports are stored in `reports/` and are not committed. Jenkins uses the same
+scripts and archives logs and JUnit XML. Its license credential is configured as
+described in [the Jenkins setup](../resources/automation/README.md).
 
 ## Test resources
 

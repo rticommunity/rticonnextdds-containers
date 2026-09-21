@@ -24,11 +24,10 @@ Provide an RTI license:
 export RTI_LICENSE_FILE_HOST=/absolute/path/rti_license.dat
 ```
 
-The demo includes [ui-password.txt](ui-password.txt) with the default RDP
-password `rti`. The license is mounted read-only into the
-Runtime and UI containers. To use a different password, set
-`UI_PASSWORD_FILE_HOST` to a readable single-line password file with no trailing
-newline.
+The demo includes [ui-password.txt](ui-password.txt) with the RDP password
+`rti`. The license is mounted read-only into the Runtime and UI containers. To
+use a different password, set `UI_PASSWORD_FILE_HOST` to a readable single-line
+password file.
 
 ## Start the demo
 
@@ -41,11 +40,10 @@ The `generate` service creates the generated C sources and executable in the
 then use that volume. The publisher repeats so the endpoints remain visible in
 Admin Console.
 
-Connect an RDP client to `localhost:3389`, log in as `user` using the password
-in [ui-password.txt](ui-password.txt), and select automatic discovery or Domain
-0. Admin Console should show the `HelloWorld` topic with one DataWriter and two
-DataReaders. The subscriber container logs also show received `HelloWorld`
-samples:
+Connect an RDP client to `localhost:3389`, log in as `user` with password
+`rti`, and select automatic discovery or Domain 0. Admin Console should show
+the `HelloWorld` topic with one DataWriter and two DataReaders. The subscriber
+container logs also show received `HelloWorld` samples:
 
 ![Admin Console showing the HelloWorld topic and matched endpoints](desktop.png)
 

@@ -37,10 +37,9 @@ is maintained in this repository, but their Dockerfiles are not provided here.
 
 ## Public Dockerfiles
 
-To avoid redistributing third-party packages from RTI, this repository also
-provides Dockerfiles that users can build on their own systems. These builds do
-not produce images published by RTI and are separate from the Docker Hub images
-listed above.
+This repository also provides Dockerfiles for SDK, Runtime and UI Tools images
+that users can build on their own systems. These are separate from the Docker
+Hub images listed above.
 
 | Image | Docker Hub image | Dockerfile | Documentation |
 | --- | --- | --- | --- |
@@ -55,29 +54,14 @@ docker buildx bake --load                  # SDK and complete Runtime
 docker buildx bake --load all              # SDK, Runtime variants and UI Tools
 ```
 
-Bake only builds the public Dockerfile targets in this repository. It does not
-build or publish the RTI-published images in the previous section. See
-[Build configuration](doc/building.md) for tags, language selection, platforms
-and installation options.
+Bake builds the Dockerfile targets in this repository. See [Build
+configuration](doc/building.md) for tags, language selection and platforms.
 
 For a publisher, two subscribers and Admin Console on one Docker network, see
 the [HelloWorld Compose example](examples/hello_world/README.md). For local and
 Jenkins validation, see [Testing and CI](tests/README.md).
 
-## Versions and Licensing
+## Licensing
 
-The public Dockerfiles on this release line default to the public
-`rticom/connext-base:7.7.0` image as their Connext source. [VERSION](VERSION)
-records the repository build baseline, not the version of every image in the
-catalog. It is not read automatically by Bake. Each published image's
-documentation and registry tags describe its own available versions. A
-`latest` registry tag can move independently of this branch.
-
-Existing release branches and Git tags retain version-specific documentation.
-No older tag is changed by adding these Dockerfiles. The `doc/` paths remain
-stable, including Collector Service's short and full README files.
-
-Repository licensing is in [LICENSE](LICENSE). Connext and third-party packages
-retain their own license terms. No RTI runtime license or installer is included.
-Request a license through the [RTI evaluation website](https://evaluation.rti.com/)
-and keep it outside the repository.
+Repository licensing is in [LICENSE](LICENSE). For a Connext license, visit the
+[RTI website](https://evaluation.rti.com/).

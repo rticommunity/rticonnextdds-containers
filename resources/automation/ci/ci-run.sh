@@ -31,11 +31,6 @@ fi
 
 status=0
 if [ "${RUN_LANGUAGE_MATRIX}" = "true" ]; then
-    if [ "${RUN_RUNTIME_EXAMPLES}" = "true" ] && [ ! -f "${RTI_LICENSE_FILE_HOST}" ]; then
-        printf "RUN_RUNTIME_EXAMPLES=true requires RTI_LICENSE_FILE_HOST or RTI_LICENSE_FILE_PATH to point to a readable license file.\n" >&2
-        exit 1
-    fi
-
     if [ "${RUN_RUNTIME_EXAMPLES}" = "true" ] && [ -z "${PYTHON_TEST_BIN}" ]; then
         PYTHON_TEST_BIN="$(./resources/automation/ci/setup-python-test-env.sh)"
     fi

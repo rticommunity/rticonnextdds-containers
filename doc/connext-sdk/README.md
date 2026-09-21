@@ -2,15 +2,13 @@
 
 The SDK image is intended for building and debugging Connext applications.
 
-**Availability:** public [Dockerfile](../../docker/connext-sdk/Dockerfile), no
-prebuilt image provided here. Run the commands below from the repository root.
-See [build configuration and platforms](../building.md).
+Use the public [Dockerfile](../../docker/connext-sdk/Dockerfile) from the
+repository root. See [build configuration and platforms](../building.md).
 
 It extends the public `rticom/connext-base:7.7.0` image with all supported
 language build dependencies.
 
-Language build dependencies are installed by `resources/scripts/install-language-dependencies.sh`.
-The SDK always installs all supported languages:
+The SDK always includes the build dependencies for:
 
 ```text
 c

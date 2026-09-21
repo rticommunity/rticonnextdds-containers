@@ -6,10 +6,6 @@ FROM --platform=${TARGETPLATFORM} ${BASE_IMAGE}
 ARG CONNEXT_VERSION=7.7.0
 ARG DOTNET_VERSION=10.0
 ARG RTI_CONNEXT_PYTHON_PACKAGE_VERSION
-ARG IMAGE_USER=rtiuser
-ARG IMAGE_GROUP=rtigroup
-ARG IMAGE_UID=1010
-ARG IMAGE_GID=1010
 
 ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
     DOTNET_VERSION=${DOTNET_VERSION} \
@@ -26,23 +22,15 @@ COPY doc/connext-sdk/README.md /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/R
 
 RUN chmod +x /usr/local/sbin/install-language-dependencies \
     && install-language-dependencies sdk all \
-    && (getent group "${IMAGE_GROUP}" >/dev/null || groupadd --gid "${IMAGE_GID}" "${IMAGE_GROUP}") \
-    && (id -u "${IMAGE_USER}" >/dev/null 2>&1 || useradd --uid "${IMAGE_UID}" --gid "${IMAGE_GID}" --create-home --shell /bin/bash "${IMAGE_USER}") \
-    && mkdir -p "/home/${IMAGE_USER}/rti_workspace/${CONNEXT_VERSION}" \
-    && chown -R "${IMAGE_USER}:${IMAGE_GROUP}" "/home/${IMAGE_USER}" /opt/rti.com
-
-RUN export DEBIAN_FRONTEND=noninteractive \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        git \
-        iputils-ping \
-        net-tools \
-    && rm -rf /var/lib/apt/lists/*
+    && (getent group rtigroup >/dev/null || groupadd --gid 1010 rtigroup) \
+    && (id -u rtiuser >/dev/null 2>&1 || useradd --uid 1010 --gid 1010 --create-home --shell /bin/bash rtiuser) \
+    && mkdir -p "/home/rtiuser/rti_workspace/${CONNEXT_VERSION}" \
+    && chown -R rtiuser:rtigroup /home/rtiuser /opt/rti.com
 
 COPY --chmod=0755 resources/scripts/rtientrypoint /usr/local/bin/rtientrypoint
 
-USER ${IMAGE_USER}
-WORKDIR /home/${IMAGE_USER}/rti_workspace/${CONNEXT_VERSION}
+USER rtiuser
+WORKDIR /home/rtiuser/rti_workspace/${CONNEXT_VERSION}
 
 SHELL ["/bin/bash", "-lc"]
 ENV VIRTUAL_ENV=/opt/rti.com/python-venv

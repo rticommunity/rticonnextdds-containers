@@ -1,8 +1,7 @@
 # Building Connext Images
 
-Run all commands from the repository root. These Dockerfiles are provided for
-local builds; RTI does not provide prebuilt images for these targets here.
-Docker must include Buildx/Bake. Compose examples also require Docker Compose.
+Run all commands from the repository root. Docker must include Buildx/Bake.
+Compose examples also require Docker Compose.
 
 ## Targets and Tags
 
@@ -48,9 +47,8 @@ SDK and Runtime support `linux/amd64` and `linux/arm64`; an emulated build needs
 Docker platform emulation. UI Tools and its RDP test client are amd64-only and
 ignore `DOCKER_PLATFORM`. UI Tools uses its own digest-pinned desktop base.
 
-The SDK/Runtime Dockerfiles also accept `DOTNET_VERSION` and
-`RTI_CONNEXT_PYTHON_PACKAGE_VERSION`. Changing language runtime versions requires
-compatible examples; C# tests currently target .NET 10.
+The SDK and Runtime Dockerfiles accept `DOTNET_VERSION` and
+`RTI_CONNEXT_PYTHON_PACKAGE_VERSION` for controlled dependency updates.
 
 ## Installation
 
@@ -62,8 +60,6 @@ respective official package repositories by
 [install-language-dependencies.sh](../resources/scripts/install-language-dependencies.sh)
 and the UI Dockerfile.
 
-Builds accept RTI's license agreement for unattended installation. A license
-file for application execution must remain external and be mounted read-only.
-Build dependencies can change over time. Build metadata provides traceability,
-not a complete dependency lock. Pin reviewed base images and package versions
-when exact reproduction is required, and update pins for security fixes.
+A license file for application execution must remain external and be mounted
+read-only. Build metadata provides traceability; use reviewed base-image and
+package-version updates when exact reproduction is required.

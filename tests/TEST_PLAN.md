@@ -1,8 +1,7 @@
 # Test Plan
 
 **Project:** RTI Connext Containers
-**Validated version:** 7.7.0
-**Validated platforms:** `linux/amd64` and `linux/arm64` for SDK/Runtime; UI Tools on `linux/amd64`
+**Platforms:** `linux/amd64` and `linux/arm64` for SDK/Runtime; UI Tools on `linux/amd64`
 **Scope:** functional build, runtime, UI and CI checks
 
 ## 1. Objective
@@ -46,31 +45,28 @@ The license must exist only on the host or CI agent and is mounted read-only. It
 
 | Image family | `linux/amd64` | `linux/arm64` |
 | --- | --- | --- |
-| SDK | Supported and validated | Supported and validated |
-| Runtime | Supported and validated | Supported and validated |
-| UI Tools | Supported and validated | Not supported by the current Dockerfile |
-| RDP test client | Supported and validated | Not supported by the current UI Tools flow |
+| SDK | Supported | Supported |
+| Runtime | Supported | Supported |
+| UI Tools | Supported | Not supported |
+| RDP test client | Supported | Not supported |
 
 The default platform is `linux/amd64`. Platform selection is controlled by
 Docker and is independent of the host operating system. UI Tools and its RDP
-test client are always built for amd64 because the UI Tools Dockerfile requires
-the amd64 Connext tools package. The `DOCKER_PLATFORM` variable applies to SDK
-and Runtime targets.
+test client are always built for amd64. The `DOCKER_PLATFORM` variable applies
+to SDK and Runtime targets.
 
 ### 3.2 Tested platform coverage
 
-The test suite validates SDK and Runtime images for both `linux/amd64` and
-`linux/arm64`. The same language matrix and Runtime variants are tested on
-both platforms, including real publisher/subscriber communication.
+The test suite supports SDK and Runtime validation on both `linux/amd64` and
+`linux/arm64`. The same language matrix and Runtime variants are tested on each
+platform, including real publisher/subscriber communication.
 
 The platform matrix includes the complete amd64 and arm64 validation flows.
 Platform-specific build and CI commands are documented in the
 [Testing and CI](README.md#platforms).
 
-UI Tools and the RDP test client are tested only on `linux/amd64`, because the
-current UI Tools Dockerfile requires the amd64 Connext tools package. This is
-an intentional product limitation rather than an untested SDK or Runtime
-platform.
+UI Tools and the RDP test client are tested only on `linux/amd64`. This is an
+intentional product limitation.
 
 ## 4. Executed coverage matrix
 
