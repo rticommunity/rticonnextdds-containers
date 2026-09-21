@@ -77,6 +77,14 @@ secret store. The Docker host must be trusted and able to read these files.
 select the image. Stop with the same Compose command using `down` instead of
 `up -d`; add `--volumes` only when you intend to delete saved preferences.
 
+The README is included in the image and can be extracted with `docker cp`:
+
+```sh
+docker create --name connext-ui-tools-readme local/connext-ui-tools:7.7.0
+docker cp connext-ui-tools-readme:/opt/rti.com/rti_connext_dds-7.7.0/README.md ./README.md
+docker rm connext-ui-tools-readme
+```
+
 ## Validation
 
 The same runner is used locally and by Jenkins:
@@ -103,3 +111,19 @@ preferences. No GPU passthrough or host networking is required by this setup.
 - [RTI Admin Console in Docker](https://www.rti.com/blog/rti-admin-console-in-docker)
 - [Original tools Dockerfile](https://github.com/rajive/dockerfiles/blob/main/connext-tools/Dockerfile)
 - [Desktop base and configuration](https://github.com/hectorm/docker-xubuntu)
+
+## License and third-party components
+
+These Dockerfiles are provided for users to build the images themselves. During
+the build, the Dockerfiles may retrieve operating-system packages, desktop
+components and other third-party software from upstream repositories and base
+images maintained by their respective providers, including Ubuntu and
+Microsoft. RTI does not host or directly provide those third-party components
+through this repository. Their availability and use are subject to the
+applicable provider terms and licenses, which the user is responsible for
+reviewing and accepting.
+
+RTI Connext software and RTI materials remain subject to the applicable RTI
+license agreement. A valid RTI Connext license is required to use the image.
+This notice does not grant any additional rights to RTI software or
+third-party components.

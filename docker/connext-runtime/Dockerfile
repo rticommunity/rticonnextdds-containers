@@ -30,6 +30,7 @@ COPY --from=connext-base /opt/rti.com/.env /opt/rti.com/.env
 COPY --from=connext-base /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}
 COPY resources/scripts/install-language-dependencies.sh /usr/local/sbin/install-language-dependencies
 COPY resources/scripts/language-utils.sh /usr/local/sbin/language-utils.sh
+COPY doc/connext-runtime/README.md /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/README.md
 
 RUN chmod +x /usr/local/sbin/install-language-dependencies \
     && install-language-dependencies runtime "${CONNEXT_LANGUAGES}" \
