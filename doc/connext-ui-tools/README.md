@@ -22,32 +22,43 @@ larger than Runtime because it includes a desktop environment.
 ## Connect
 
 Get a license from the [RTI website](https://evaluation.rti.com/).
-Use an existing user-defined Docker network containing the applications you
-want to inspect.
+The supplied Compose file uses host networking, so no additional Docker
+network needs to be created.
 
-Create a password file outside the repository with a unique, non-empty,
-single-line password. For example:
+Create a password file in the current directory with a unique, non-empty,
+eight-character password. For example:
 
 ```sh
-export UI_PASSWORD_FILE_HOST=/absolute/path/ui-password.txt
+export UI_PASSWORD_FILE_HOST=./password.txt
 umask 077
-openssl rand -hex 24 > "${UI_PASSWORD_FILE_HOST}"
+openssl rand -hex 4 | tr -d '\n' > "${UI_PASSWORD_FILE_HOST}"
 ```
 
 ```sh
-export RTI_LICENSE_FILE_HOST=/absolute/path/rti_license.dat
-export CONNEXT_DOCKER_NETWORK=my-application-network
-docker compose -f docker/connext-ui-tools/compose.yaml up -d
+export RTI_LICENSE_FILE_HOST=</absolute/path/rti_license.dat>
+docker compose --project-directory . -f docker/connext-ui-tools/compose.yaml up -d
 ```
+
+> **Docker Desktop:** Host networking is opt-in. On macOS, and on Windows when
+> using Linux containers, enable **Enable host networking** under **Settings →
+> Resources → Network** and restart Docker Desktop before starting this
+> Compose. Without it, `localhost:3389` on the host may not reach XRDP. Host
+> networking is not supported when Docker Desktop is using Windows containers.
+> See the [Docker host network documentation](https://docs.docker.com/engine/network/drivers/host/).
 
 Connect an RDP client to `localhost:3389`, select an Xorg session if prompted,
 and log in as `user` with your password. Admin Console starts with the desktop.
 Other tools are available from the desktop and under
 `/opt/rti.com/rti_connext_dds-7.7.0/bin`.
 
-The supplied Compose binds RDP to loopback and preserves preferences in the
-`ui-home` volume. Stop it with the same Compose command using `down`; add
-`--volumes` only when you intend to delete saved preferences.
+The supplied Compose uses the host network and preserves preferences in the
+`ui-home` volume. Stop it with:
+
+```sh
+docker compose --project-directory . -f docker/connext-ui-tools/compose.yaml down
+```
+
+Add `--volumes` only when you intend to delete saved preferences.
 
 This README is included in the image and can be extracted with `docker cp`:
 
