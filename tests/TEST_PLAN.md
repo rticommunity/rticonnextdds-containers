@@ -21,27 +21,12 @@ The plan prioritizes real behavior over superficial checks such as file or proce
 
 ## 2. CI entry point
 
-The single entry point is [resources/automation/ci/ci-run.sh](../resources/automation/ci/ci-run.sh). It performs:
-
-1. script and source checks;
-2. Dockerfile static validation with Bake;
-3. language matrix build and validation;
-4. UI Tools and XRDP validation;
-5. artifact and JUnit generation.
-
-The full licensed run is:
-
-```sh
-RTI_LICENSE_FILE_HOST=/absolute/path/rti_license.dat \
-RUN_RUNTIME_EXAMPLES=true \
-./resources/automation/ci/ci-run.sh
-```
-
-The license must exist only on the host or CI agent and is mounted read-only. It is never part of the Docker build context or repository.
+The single entry point is
+[resources/automation/ci/ci-run.sh](../resources/automation/ci/ci-run.sh).
+See [Testing and CI](README.md) for execution commands, license requirements,
+options and platform behavior.
 
 ## 3. Platform compatibility
-
-### 3.1 Supported platform matrix
 
 | Image family | `linux/amd64` | `linux/arm64` |
 | --- | --- | --- |
@@ -50,25 +35,24 @@ The license must exist only on the host or CI agent and is mounted read-only. It
 | UI Tools | Supported | Not supported |
 | RDP test client | Supported | Not supported |
 
-The default platform is `linux/amd64`. Platform selection is controlled by
-Docker and is independent of the host operating system. UI Tools and its RDP
-test client are always built for amd64. The `DOCKER_PLATFORM` variable applies
-to SDK and Runtime targets.
-
-### 3.2 Tested platform coverage
-
-The test suite supports SDK and Runtime validation on both `linux/amd64` and
-`linux/arm64`. The same language matrix and Runtime variants are tested on each
-platform, including real publisher/subscriber communication.
-
-The platform matrix includes the complete amd64 and arm64 validation flows.
-Platform-specific build and CI commands are documented in the
-[Testing and CI](README.md#platforms).
-
-UI Tools and the RDP test client are tested only on `linux/amd64`. This is an
-intentional product limitation.
+The default platform is `linux/amd64`; `DOCKER_PLATFORM` selects the SDK and
+Runtime platform. The complete language matrix and Runtime variants are tested
+on both supported platforms. UI Tools and the RDP test client are amd64-only
+and are skipped automatically on ARM64. See [Testing and CI](README.md#platforms)
+for platform-specific commands.
 
 ## 4. Executed coverage matrix
+
+The following table summarizes the executed checks. Each entry links to the
+detailed coverage below.
+
+| Area | Summary | Details |
+| --- | --- | --- |
+| Repository and scripts (`ci-check.sh`) | Bash, Python and language-helper validation | [Repository and script checks](#41-repository-and-script-checks) |
+| Docker and Bake (`docker buildx bake --check`) | Dockerfile, target, context and argument validation | [Docker and Bake configuration](#42-docker-and-bake-configuration) |
+| SDK and examples (`test-connext-examples.sh`) | Multi-language HelloWorld generation and compilation | [Example build and compilation](#43-example-build-and-compilation) |
+| Runtime communication (`pubsub_test.py`) | Real publisher/subscriber DDS communication | [Runtime pub/sub tests](#44-runtime-pubsub-tests) |
+| UI and Admin Console (`ui_tools_test.py`) | XRDP, FreeRDP, desktop capture and Admin Console UI | [UI Tools, XRDP and Admin Console](#45-ui-tools-xrdp-and-admin-console) |
 
 ### 4.1 Repository and script checks
 
@@ -205,9 +189,3 @@ Each run creates a `reports/<run-id>/` directory containing, as applicable:
 - per-language and UI Tools JUnit XML.
 
 Jenkins archives `reports/**/*` and publishes the XML files through the JUnit publisher. A build or test failure fails the job.
-
-## 9. Conclusion
-
-The current suite covers practically all core functional behavior in the repository: build, compilation, multi-language DDS execution, external licensing, basic startup security, XRDP, RDP connection from an independent container, remote capture, expected UI content and CI reporting.
-
-It does not cover image security, prolonged resilience or performance.

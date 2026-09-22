@@ -5,17 +5,8 @@ images.
 
 ## Run the checks
 
-From the repository root:
-
-```sh
-./resources/automation/ci/ci-run.sh
-```
-
-This validates the repository, Bake configuration, image builds and generated
-examples. It runs publisher/subscriber communication when a license is supplied.
-
-To run the Runtime and Admin Console integration tests, provide a readable RTI
-license file outside the repository:
+From the repository root, run the complete local validation with a readable RTI
+license outside the repository:
 
 ```sh
 RUN_RUNTIME_EXAMPLES=true \
@@ -23,18 +14,21 @@ RTI_LICENSE_FILE_HOST=/absolute/path/rti_license.dat \
 ./resources/automation/ci/ci-run.sh
 ```
 
+This validates the repository, Bake configuration, image builds, generated
+examples, Runtime publisher/subscriber communication and the Admin Console UI.
+
 ## Platforms
 
 The default SDK/Runtime matrix uses `linux/amd64`. For `linux/arm64`, run:
 
 ```sh
-DOCKER_PLATFORM=linux/arm64 RUN_UI_TOOLS=false RUN_RUNTIME_EXAMPLES=true \
+DOCKER_PLATFORM=linux/arm64 \
 RTI_LICENSE_FILE_HOST=/absolute/path/rti_license.dat \
 ./resources/automation/ci/ci-run.sh
 ```
 
-UI Tools and its RDP client are amd64-only and are tested separately. Docker
-needs emulation when the selected architecture differs from the host.
+Connext UI Tools are not supported on ARM. This test runs only the SDK and
+Runtime validation on ARM64.
 
 ## CI Options
 
@@ -45,17 +39,20 @@ ports must be reachable from the runner.
 
 | Environment variable | Default | Purpose |
 | --- | --- | --- |
-| CI_LANGUAGE_PROFILES | all c cpp java csharp python | Runtime profiles |
-| RUN_DOCKERFILE_CHECKS | true | Bake static checks |
-| RUN_LANGUAGE_MATRIX | true | SDK/Runtime builds and examples |
-| RUN_UI_TOOLS | true | UI Tools build and RDP checks |
-| RUN_RUNTIME_EXAMPLES | false locally, true in Jenkins | Licensed DDS and graphical tests |
-| RTI_LICENSE_FILE_HOST | empty locally | Absolute path to an external license |
-| KEEP_CI_IMAGES | false | Retain temporary image tags |
-| MAX_RUNTIME_IMAGE_SIZE_MB | 0 | Runtime size limit in MiB; zero disables |
-| NO_CACHE | false | Rebuild without Docker layer cache |
-| IMAGE_TAG_SUFFIX | generated timestamp | Override with a unique value for concurrent jobs |
-| PYTHON_TEST_BIN | project venv | Interpreter with pytest and pexpect |
+| `CONNEXT_VERSION` | `7.7.0` | Connext version and image tags |
+| `DOCKER_PLATFORM` | `linux/amd64` | SDK/Runtime build and test platform |
+| `CI_LANGUAGE_PROFILES` | `all c cpp java csharp python` | Runtime profiles to build and test |
+| `RUN_RUNTIME_EXAMPLES` | `true` | Run licensed DDS tests and Admin Console integration when UI Tools is enabled; requires `RTI_LICENSE_FILE_HOST` |
+| `RTI_LICENSE_FILE_HOST` | not set | External readable RTI license; required by default |
+| `RUN_UI_TOOLS` | `true` on amd64; `false` on arm64 | Build and test UI Tools |
+| `RUN_LANGUAGE_MATRIX` | `true` | Build and test SDK/Runtime images |
+| `RUN_DOCKERFILE_CHECKS` | `true` | Run Bake configuration checks |
+| `NO_CACHE` | `false` | Rebuild without Docker layer cache |
+| `KEEP_CI_IMAGES` | `false` | Keep locally built CI images |
+| `MAX_RUNTIME_IMAGE_SIZE_MB` | `0` | Optional Runtime size limit; `0` disables it |
+| `IMAGE_TAG_PREFIX` | `local` | Prefix for local image tags |
+| `IMAGE_TAG_SUFFIX` | generated timestamp | Suffix for image tags and report directories |
+| `PYTHON_TEST_BIN` | auto-created `.ci-venv` | Python interpreter with pytest and pexpect |
 
 Reports are stored in `reports/` and are not committed. Jenkins uses the same
 scripts and archives logs and JUnit XML. Its license credential is configured as

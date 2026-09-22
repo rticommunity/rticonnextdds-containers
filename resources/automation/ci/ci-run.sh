@@ -10,19 +10,29 @@ IMAGE_TAG_PREFIX="${IMAGE_TAG_PREFIX:-local}"
 IMAGE_TAG_SUFFIX="${IMAGE_TAG_SUFFIX:-run-$(date '+%Y-%m-%d_%H-%M-%S')}"
 RUN_DOCKERFILE_CHECKS="${RUN_DOCKERFILE_CHECKS:-true}"
 RUN_LANGUAGE_MATRIX="${RUN_LANGUAGE_MATRIX:-true}"
-RUN_UI_TOOLS="${RUN_UI_TOOLS:-true}"
-RUN_RUNTIME_EXAMPLES="${RUN_RUNTIME_EXAMPLES:-false}"
+RUN_RUNTIME_EXAMPLES="${RUN_RUNTIME_EXAMPLES:-true}"
 RTI_LICENSE_FILE_HOST="${RTI_LICENSE_FILE_HOST:-${RTI_LICENSE_FILE_PATH:-}}"
 PYTHON_TEST_BIN="${PYTHON_TEST_BIN:-}"
 KEEP_CI_IMAGES="${KEEP_CI_IMAGES:-false}"
 MAX_RUNTIME_IMAGE_SIZE_MB="${MAX_RUNTIME_IMAGE_SIZE_MB:-0}"
 CI_LANGUAGE_PROFILES="${CI_LANGUAGE_PROFILES:-all c cpp java csharp python}"
 
+if [ -z "${RUN_UI_TOOLS+x}" ]; then
+    case "${DOCKER_PLATFORM}" in
+        linux/arm64*) RUN_UI_TOOLS=false ;;
+        *) RUN_UI_TOOLS=true ;;
+    esac
+fi
+
 ./resources/automation/ci/ci-check.sh
 
-if [ "${RUN_RUNTIME_EXAMPLES}" = true ] && [ ! -f "${RTI_LICENSE_FILE_HOST}" ]; then
-    printf 'Runtime and GUI execution require a readable license file.\n' >&2
-    exit 1
+if [ "${RUN_RUNTIME_EXAMPLES}" = true ]; then
+    if [ -z "${RTI_LICENSE_FILE_HOST}" ] || \
+        [ ! -f "${RTI_LICENSE_FILE_HOST}" ] || \
+        [ ! -r "${RTI_LICENSE_FILE_HOST}" ]; then
+        printf 'RTI license file not found or not readable. Set RTI_LICENSE_FILE_HOST to a valid file. Obtain a license at: https://evaluation.rti.com/\n' >&2
+        exit 1
+    fi
 fi
 
 if [ "${RUN_DOCKERFILE_CHECKS}" = "true" ]; then

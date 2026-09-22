@@ -24,7 +24,7 @@ fi
 docker buildx bake "${bake_args[@]}" ui-test
 docker image inspect "$image" "$rdp_client_image" > "$reports/images.json"
 args=(--image "$image" --rdp-client-image "$rdp_client_image" --reports "$reports")
-if [ "${RUN_RUNTIME_EXAMPLES:-false}" = true ]; then
+if [ "${RUN_RUNTIME_EXAMPLES:-true}" = true ]; then
     args+=(--license-file "${RTI_LICENSE_FILE_HOST:?A license is required for the GUI test}")
 fi
 "${PYTHON_TEST_BIN}" -m pytest -c "${repo_root}/tests/pytest.ini" -q --junitxml "$reports/ui-tools.xml" \
