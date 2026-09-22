@@ -1,26 +1,22 @@
-# RTI Connext Container Images Documentation
+# RTI Connext Container Images and Dockerfiles
 
-Welcome to the official repository for [RTI Connext Container Images](https://hub.docker.com/u/rticom). This repository contains the documentation for all available container images provided by RTI and their respective tags.
+Welcome to the official repository for [RTI Connext Container Images](https://hub.docker.com/u/rticom). This repository contains documentation for the container images published by RTI, as well as public Dockerfiles and build configuration for creating Connext SDK, Runtime and UI Tools images.
 
-## Overview
-
-Each container image provided by RTI is designed to help you quickly and efficiently deploy and run your applications in a containerized environment.
-
-### Documentation
+## Documentation
 
 You can find the documentation for a specific image and version by navigating to the appropriate directory under the `doc/` folder.
 
-> **Note:** The documentation shown on DockerHub and in the `main` branch of this repository refers to the `latest` tag for each image, which corresponds to the most recent image released by RTI. For specific tag documentation, refer to the appropriate tag in this repository.
+> **Note:** The documentation shown on Docker Hub and in the `main` branch of this repository refers to the `latest` tag for each image, which corresponds to the most recent image released by RTI. For specific tag documentation, refer to the appropriate tag in this repository.
 
-### Quick Links
+## Quick Links
 
-- **DockerHub Repository**: [RTI Community on DockerHub](https://hub.docker.com/u/rticom)
+- **Docker Hub Repository**: [RTI Community on Docker Hub](https://hub.docker.com/u/rticom)
 - **RTI Connext Documentation**: [RTI Documentation Portal](https://community.rti.com/documentation)
 
 ## RTI-published images
 
-The following images are distributed by RTI through Docker Hub. Their documentation
-is maintained in this repository, but their Dockerfiles are not provided here.
+The following images are distributed by RTI through Docker Hub. Their
+documentation is maintained in this repository.
 
 | Image | Docker Hub | Documentation |
 | --- | --- | --- |
@@ -37,15 +33,15 @@ is maintained in this repository, but their Dockerfiles are not provided here.
 
 ## Public Dockerfiles
 
-This repository also provides Dockerfiles for SDK, Runtime and UI Tools images
-that users can build on their own systems. These are separate from the Docker
-Hub images listed above.
+This repository also provides public Dockerfiles for SDK, Runtime and UI Tools
+images that users can build on their own systems. These buildable images are
+separate from the Docker Hub service images listed above.
 
-| Image | Docker Hub image | Dockerfile | Documentation |
-| --- | --- | --- | --- |
-| Connext SDK | Not provided; build locally | [Dockerfile](docker/connext-sdk/Dockerfile) | [Build and usage](doc/connext-sdk/README.md) |
-| Connext Runtime and language variants | Not provided; build locally | [Dockerfile](docker/connext-runtime/Dockerfile) | [Build and usage](doc/connext-runtime/README.md) |
-| Connext UI Tools | Not provided; build locally | [Dockerfile](docker/connext-ui-tools/Dockerfile) | [Build and RDP](doc/connext-ui-tools/README.md) |
+| Image | Dockerfile | Documentation |
+| --- | --- | --- |
+| Connext SDK | [Dockerfile](docker/connext-sdk/Dockerfile) | [Build and usage](doc/connext-sdk/README.md) |
+| Connext Runtime and language variants | [Dockerfile](docker/connext-runtime/Dockerfile) | [Build and usage](doc/connext-runtime/README.md) |
+| Connext UI Tools | [Dockerfile](docker/connext-ui-tools/Dockerfile) | [Build and usage](doc/connext-ui-tools/README.md) |
 
 Install Docker with Buildx/Bake and run these commands from the repository root:
 
