@@ -17,7 +17,7 @@ ARG TARGETARCH
 ARG CONNEXT_VERSION=7.7.0
 ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
     NDDSHOME=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} \
-    RTI_LICENSE_FILE=/licenses/rti_license.dat
+    RTI_LICENSE_FILE=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/rti_license.dat
 
 USER root
 COPY --from=connext-base /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION} /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}

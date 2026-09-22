@@ -10,3 +10,4 @@ reports/
 outputs/
 .env
 .env.*
+password.txt

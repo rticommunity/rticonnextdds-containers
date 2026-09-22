@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate UI Tools startup, XRDP connectivity and the Admin Console UI."""
 
+import os
 import re
 import secrets
 import socket
@@ -84,9 +85,10 @@ def start_ui_container(image, container_name, password, license_path):
     ]
     if license_path:
         license_file = Path(license_path).resolve(strict=True)
+        connext_version = os.environ.get("CONNEXT_VERSION", "7.7.0")
         options += [
             "--mount",
-            f"type=bind,src={license_file},dst=/licenses/rti_license.dat,readonly",
+            f"type=bind,src={license_file},dst=/opt/rti.com/rti_connext_dds-{connext_version}/rti_license.dat,readonly",
             "--env",
             "SERVICE_XRDP_BOOTSTRAP_ENABLED=true",
         ]

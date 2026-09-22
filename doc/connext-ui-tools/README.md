@@ -2,6 +2,7 @@
 
 Use the public [Dockerfile](../../docker/connext-ui-tools/Dockerfile) from the
 repository root. See [build configuration](../building.md).
+Run the commands below from the repository root.
 
 The image copies the RTI Connext 7.7.0 UI tools from the public
 `rticom/connext-base:7.7.0` image: Admin Console, Launcher, Monitor, Shapes
@@ -19,11 +20,17 @@ docker buildx bake --load ui-tools
 The default tag is `local/connext-ui-tools:7.7.0`. This image is substantially
 larger than Runtime because it includes a desktop environment.
 
-## Connect
+This README is included in the image and can be extracted with `docker cp`:
 
-Get a license from the [RTI website](https://evaluation.rti.com/).
-The supplied Compose file uses host networking, so no additional Docker
-network needs to be created.
+```sh
+docker create --name connext-ui-tools-readme local/connext-ui-tools:7.7.0
+docker cp connext-ui-tools-readme:/opt/rti.com/rti_connext_dds-7.7.0/README.md ./README.md
+docker rm connext-ui-tools-readme
+```
+
+## Quick start
+
+Get an RTI Connext license from the [RTI website](https://evaluation.rti.com/).
 
 Create a password file in the current directory with a unique, non-empty,
 eight-character password. For example:
@@ -34,25 +41,45 @@ umask 077
 openssl rand -hex 4 | tr -d '\n' > "${UI_PASSWORD_FILE_HOST}"
 ```
 
+Start it directly with Docker:
+
 ```sh
+export RTI_LICENSE_FILE_HOST=</absolute/path/rti_license.dat>
+docker run -d \
+  --name connext-ui-tools \
+  --platform linux/amd64 \
+  --network host \
+  --shm-size 1g \
+  --env UI_PASSWORD_FILE=/run/secrets/ui_password \
+  --mount type=bind,src="$PWD/password.txt",dst=/run/secrets/ui_password,readonly \
+  --mount type=bind,src="${RTI_LICENSE_FILE_HOST}",dst=/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat,readonly \
+  --mount type=volume,src=ui-home,dst=/home/user \
+  local/connext-ui-tools:7.7.0
+```
+
+Once started, follow the [RDP connection](#rdp-connection) instructions.
+
+Stop the direct container with:
+
+```sh
+docker rm -f connext-ui-tools
+```
+
+## Compose deployment
+
+The supplied Compose uses the same host network and preserves preferences in
+the `ui-home` volume. Create `password.txt` as described in [Quick start](#quick-start),
+then start it with:
+
+```sh
+export UI_PASSWORD_FILE_HOST=./password.txt
 export RTI_LICENSE_FILE_HOST=</absolute/path/rti_license.dat>
 docker compose --project-directory . -f docker/connext-ui-tools/compose.yaml up -d
 ```
 
-> **Docker Desktop:** Host networking is opt-in. On macOS, and on Windows when
-> using Linux containers, enable **Enable host networking** under **Settings →
-> Resources → Network** and restart Docker Desktop before starting this
-> Compose. Without it, `localhost:3389` on the host may not reach XRDP. Host
-> networking is not supported when Docker Desktop is using Windows containers.
-> See the [Docker host network documentation](https://docs.docker.com/engine/network/drivers/host/).
+Once started, follow the [RDP connection](#rdp-connection) instructions.
 
-Connect an RDP client to `localhost:3389`, select an Xorg session if prompted,
-and log in as `user` with your password. Admin Console starts with the desktop.
-Other tools are available from the desktop and under
-`/opt/rti.com/rti_connext_dds-7.7.0/bin`.
-
-The supplied Compose uses the host network and preserves preferences in the
-`ui-home` volume. Stop it with:
+Stop the Compose deployment with:
 
 ```sh
 docker compose --project-directory . -f docker/connext-ui-tools/compose.yaml down
@@ -60,13 +87,20 @@ docker compose --project-directory . -f docker/connext-ui-tools/compose.yaml dow
 
 Add `--volumes` only when you intend to delete saved preferences.
 
-This README is included in the image and can be extracted with `docker cp`:
+## RDP connection
 
-```sh
-docker create --name connext-ui-tools-readme local/connext-ui-tools:7.7.0
-docker cp connext-ui-tools-readme:/opt/rti.com/rti_connext_dds-7.7.0/README.md ./README.md
-docker rm connext-ui-tools-readme
-```
+Connect an RDP client to `localhost:3389`, select an Xorg session if prompted,
+and log in as `user` with your password. Admin Console starts with the desktop.
+Other tools are available from the desktop and under
+`/opt/rti.com/rti_connext_dds-7.7.0/bin`.
+
+> **Docker Desktop:** Host networking is opt-in. On macOS, and on Windows when
+> using Linux containers, enable **Enable host networking** under **Settings →
+> Resources → Network** and restart Docker Desktop before starting the
+> container or Compose deployment. Without it, `localhost:3389` on the host may
+> not reach XRDP. Host networking is not supported when Docker Desktop is using
+> Windows containers.
+> See the [Docker host network documentation](https://docs.docker.com/engine/network/drivers/host/).
 
 ## References
 
