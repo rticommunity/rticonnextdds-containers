@@ -22,11 +22,15 @@ find "${root}/lib" -type f \( -name '*.a' -o -name '*d.so' -o -name '*zd.a' \) -
 
 case "${flavor}" in
     runtime)
+        # Runtime installs rti.connext from PyPI when the Python profile is
+        # selected, so the platform-specific source wheels are not needed.
         rm -rf "${root}/resource/app" "${root}/resource/python_api"
         find "${root}/bin" -mindepth 1 ! -name rtientrypoint -delete
         ;;
     ui-tools)
-        rm -rf "${root}/resource/python_api"
+        # UI Tools does not install rti.connext from PyPI; retain the packaged
+        # wheels for Python-backed UI functionality.
+        :
         ;;
     *)
         printf 'Unsupported prune flavor: %s\n' "${flavor}" >&2
