@@ -22,6 +22,7 @@ documentation is maintained in this repository.
 | --- | --- | --- |
 | cloud-discovery-service | [Image](https://hub.docker.com/r/rticom/cloud-discovery-service) | [Usage](doc/cloud-discovery-service/README.md) |
 | collector-service | [Image](https://hub.docker.com/r/rticom/collector-service) | [Usage](doc/collector-service/README.md) |
+| connext-base | [Image](https://hub.docker.com/r/rticom/connext-base) | [Usage](doc/connext-base/README.md) |
 | dds-ping | [Image](https://hub.docker.com/r/rticom/dds-ping) | [Usage](doc/dds-ping/README.md) |
 | dds-spy | [Image](https://hub.docker.com/r/rticom/dds-spy) | [Usage](doc/dds-spy/README.md) |
 | perftest | [Image](https://hub.docker.com/r/rticom/perftest) | [Usage](doc/perftest/README.md) |
@@ -35,7 +36,7 @@ documentation is maintained in this repository.
 
 This repository also provides public Dockerfiles for SDK, Runtime and UI Tools
 images that users can build on their own systems. These buildable images are
-separate from the Docker Hub service images listed above.
+separate from the Docker Hub images listed above.
 
 | Image | Dockerfile | Documentation |
 | --- | --- | --- |
