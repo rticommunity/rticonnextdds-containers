@@ -1,12 +1,15 @@
 # Connext SDK Image
 
-The SDK image is intended for building and debugging Connext applications.
-
 Use the public [Dockerfile](../../docker/connext-sdk/Dockerfile) from the
-repository root. See [build configuration and platforms](../building.md).
+repository root. See [build configuration](../building.md).
+Run the commands below from the repository root.
+
+The SDK image is intended for building and debugging Connext applications.
 
 It extends the public `rticom/connext-base:7.7.0` image with all supported
 language build dependencies.
+
+## Build
 
 The SDK always includes the build dependencies for:
 
@@ -18,22 +21,13 @@ csharp
 python
 ```
 
-Build (all supported languages):
-
 ```sh
 docker buildx bake --load sdk
 ```
 
+The default tag is `local/connext-sdk:7.7.0`.
 
-Run:
-
-```sh
-docker run --rm -it \
-  --volume "/absolute/path/rti_license.dat:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat:ro" \
-  local/connext-sdk:7.7.0
-```
-
-The README is included in the image and can be extracted with `docker cp`:
+This README is included in the image and can be extracted with `docker cp`:
 
 ```sh
 docker create --name connext-sdk-readme local/connext-sdk:7.7.0
@@ -41,18 +35,82 @@ docker cp connext-sdk-readme:/opt/rti.com/rti_connext_dds-7.7.0/README.md ./READ
 docker rm connext-sdk-readme
 ```
 
-## License and third-party components
+## Quick start
 
-These Dockerfiles are provided for users to build the images themselves. During
-the build, the Dockerfiles may retrieve operating-system packages, language
-runtimes and other third-party components from upstream repositories and base
-images maintained by their respective providers, including Ubuntu and
-Microsoft. RTI does not host or directly provide those third-party components
-through this repository. Their availability and use are subject to the
-applicable provider terms and licenses, which the user is responsible for
-reviewing and accepting.
+Get an RTI Connext license from the [RTI website](https://evaluation.rti.com/).
+Start the image directly with Docker:
 
-RTI Connext software and RTI materials remain subject to the applicable RTI
-license agreement. A valid RTI Connext license is required to use the image.
-This notice does not grant any additional rights to RTI software or
-third-party components.
+```sh
+export RTI_LICENSE_FILE_HOST=</absolute/path/rti_license.dat>
+docker run --rm -it \
+  --volume "${RTI_LICENSE_FILE_HOST}:/opt/rti.com/rti_connext_dds-7.7.0/rti_license.dat:ro" \
+  local/connext-sdk:7.7.0
+```
+
+## License
+
+The _RTI Connext®_ SDK Dockerfile is licensed under the following supplemental
+license terms and the repository `LICENSE`. RTI Connext software included in
+the generated image remains subject to the applicable
+[RTI License Agreements and Terms of Use](https://www.rti.com/get-connext/terms).
+
+The generated image is based on `rticom/connext-base`, which uses
+[Ubuntu](https://hub.docker.com/_/ubuntu). It may install operating-system
+packages, language runtimes and other third-party components, including
+components provided by Microsoft. Use of those components is subject to their
+applicable license terms.
+
+Additional information about third-party software included with RTI Connext is
+available in the
+[RTI documentation](https://community.rti.com/documentation#doc_third_party).
+
+The RTI license agreement PDF is included in the generated image and can be
+extracted with:
+
+```sh
+docker create --name connext-sdk-license local/connext-sdk:7.7.0
+docker cp connext-sdk-license:/opt/rti.com/rti_connext_dds-7.7.0/RTI_License_Agreement_LM.pdf .
+docker rm connext-sdk-license
+```
+
+## How to get a license file
+
+An RTI license file is required to use RTI Connext software in the generated
+image.
+
+### Existing customers
+
+If you are an RTI customer and need an RTI Connext license file, contact
+[RTI support](https://www.rti.com/support).
+
+### Evaluators
+
+If you are not an RTI customer, request an [RTI Connext free
+trial](https://www.rti.com/free-trial/connext) for release 7.7.0 or later.
+
+### RTI Supplemental License
+
+This RTI Supplemental License ("Supplemental License") applies only to the
+Dockerfile provided with this README. It supplements, and does not replace, the
+[repository `LICENSE`](https://github.com/rticommunity/rticonnextdds-containers/blob/main/LICENSE),
+which governs use, modification and distribution of the Dockerfile.
+
+This Supplemental License does not grant any rights to RTI Connext software. A
+container image built from the Dockerfile (the "Generated Image") is built,
+configured and maintained by you. RTI does not distribute or license the
+Generated Image as a whole.
+
+Any RTI Connext software contained in the Generated Image remains subject to
+the RTI license agreement under which you obtained that software (the
+"Applicable RTI License Agreement"). Building the Generated Image does not
+grant any additional rights to use or distribute RTI Connext software.
+
+Third-party software included in or installed while building the Generated
+Image remains subject to its applicable license terms. You are responsible for
+reviewing and complying with those terms.
+
+The Dockerfile is provided under the warranty, support and liability terms in
+the repository `LICENSE`. RTI is not responsible for the configuration or
+maintenance of the Generated Image. Nothing in this Supplemental License
+modifies the terms that apply to RTI Connext software under the Applicable RTI
+License Agreement.
