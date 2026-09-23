@@ -30,11 +30,6 @@ pipeline {
             description: 'Build the shared SDK and test Runtime profiles: all, c, cpp, java, csharp, and python.'
         )
         booleanParam(
-            name: 'RUN_UI_TOOLS',
-            defaultValue: true,
-            description: 'Build UI tools and test RDP; also test Admin Console startup when RUN_RUNTIME_EXAMPLES is enabled.'
-        )
-        booleanParam(
             name: 'RUN_RUNTIME_EXAMPLES',
             defaultValue: true,
             description: 'Run generated applications in the Runtime image. Requires the rti_license.dat Jenkins credential.'
@@ -69,7 +64,6 @@ pipeline {
                         DOCKER_PLATFORM="${DOCKER_PLATFORM}" \
                         IMAGE_TAG_PREFIX="${IMAGE_TAG_PREFIX}" \
                         RUN_LANGUAGE_MATRIX="${RUN_LANGUAGE_MATRIX}" \
-                        RUN_UI_TOOLS="${RUN_UI_TOOLS}" \
                         RUN_RUNTIME_EXAMPLES="${RUN_RUNTIME_EXAMPLES}" \
                         RTI_LICENSE_FILE_HOST="$CI_LICENSE_FILE" \
                         NO_CACHE=false \
