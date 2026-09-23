@@ -67,9 +67,14 @@ included in the generated image remains subject to the applicable
 [RTI License Agreements and Terms of Use](https://www.rti.com/get-connext/terms).
 
 The generated image uses [Ubuntu](https://hub.docker.com/_/ubuntu) and content
-from `rticom/connext-base`. It may install language runtimes and other
-third-party components, including components provided by Microsoft. Use of
-those components is subject to their applicable license terms.
+from [`rticom/connext-base`](https://hub.docker.com/r/rticom/connext-base). It
+may install language runtimes and other third-party components, including
+components provided by Microsoft. Use of those components is subject to their
+applicable license terms.
+
+The license terms supplied with `rticom/connext-base` are preserved in the
+generated image at
+`/opt/rti.com/rti_connext_dds-7.7.0/RTI_CONNEXT_BASE_README.md`.
 
 Additional information about third-party software included with RTI Connext is
 available in the
@@ -106,22 +111,44 @@ Dockerfile provided with this README. It supplements, and does not replace, the
 [repository `LICENSE`](https://github.com/rticommunity/rticonnextdds-containers/blob/main/LICENSE),
 which governs use, modification and distribution of the Dockerfile.
 
-This Supplemental License does not grant any rights to RTI Connext software. A
-container image built from the Dockerfile (the "Generated Image") is built,
-configured and maintained by you. RTI does not distribute or license the
-Generated Image as a whole.
+A container image built from the Dockerfile (the "Generated Image") is built,
+configured and maintained by you. This Supplemental License does not license
+the Generated Image as a whole.
 
-Any RTI Connext software contained in the Generated Image remains subject to
-the RTI license agreement under which you obtained that software (the
-"Applicable RTI License Agreement"). Building the Generated Image does not
-grant any additional rights to use or distribute RTI Connext software.
+**RTI Connext Base Image and Software.** The Dockerfile uses
+`rticom/connext-base`, whose license terms are preserved in the Generated
+Image as described above. RTI Connext software remains subject to the license
+agreement under which you obtained it (the "Applicable RTI License
+Agreement"). Building the Generated Image does not grant additional rights to
+use or distribute RTI Connext software.
 
-Third-party software included in or installed while building the Generated
-Image remains subject to its applicable license terms. You are responsible for
-reviewing and complying with those terms.
+**Use Rights.** The Dockerfile may be used only in connection with configuring,
+building, testing and using RTI Connext software. You are responsible for any
+modifications to the Dockerfile and for the configuration and operation of the
+Generated Image.
 
-The Dockerfile is provided under the warranty, support and liability terms in
-the repository `LICENSE`. RTI is not responsible for the configuration or
-maintenance of the Generated Image. Nothing in this Supplemental License
+**Disclaimer of Warranties.** The Dockerfile is provided on an "AS IS" basis
+under the warranty terms in the repository `LICENSE`. RTI does not warrant any
+Generated Image built or configured by you.
+
+**Feedback.** Any suggestions or ideas you provide to RTI regarding the
+Dockerfile (collectively, "Feedback"), may be used and exploited in any and
+every way by RTI (including without limitation, by granting sublicenses), on a
+non-exclusive, perpetual, irrevocable, transferable, and worldwide basis,
+without any compensation, without any obligation to report on such use, and
+without any other restriction or obligation to you.
+
+**Limitation of Liability.** RTI's liability arising from the Dockerfile is
+subject to the repository `LICENSE`. Nothing in this Supplemental License
 modifies the terms that apply to RTI Connext software under the Applicable RTI
 License Agreement.
+
+**OSS.** The Dockerfile may retrieve third-party software from upstream
+repositories. RTI does not host or distribute those components through this
+repository. Each component remains subject to its applicable license terms.
+Open-source software included in `rticom/connext-base` remains subject to the
+notices supplied with that base image.
+
+**General.** This Supplemental License applies only to the Dockerfile. It does
+not modify the terms that apply to `rticom/connext-base`, RTI Connext software
+or third-party components.

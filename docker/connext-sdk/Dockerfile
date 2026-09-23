@@ -18,6 +18,8 @@ ENV CONNEXT_VERSION=${CONNEXT_VERSION} \
 
 USER root
 
+RUN cp "${NDDSHOME}/README.md" "${NDDSHOME}/RTI_CONNEXT_BASE_README.md"
+
 COPY resources/scripts/install-language-dependencies.sh /usr/local/sbin/install-language-dependencies
 COPY resources/scripts/language-utils.sh /usr/local/sbin/language-utils.sh
 COPY doc/connext-sdk/README.md /opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}/README.md

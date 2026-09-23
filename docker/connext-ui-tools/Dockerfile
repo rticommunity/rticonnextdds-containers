@@ -12,7 +12,8 @@ ENV NDDSHOME=/opt/rti.com/rti_connext_dds-${CONNEXT_VERSION}
 
 USER root
 COPY --chmod=0755 resources/scripts/prune-connext.sh /usr/local/sbin/prune-connext
-RUN prune-connext ui-tools
+RUN cp "${NDDSHOME}/README.md" "${NDDSHOME}/RTI_CONNEXT_BASE_README.md" \
+    && prune-connext ui-tools
 
 FROM --platform=linux/amd64 ${UI_BASE_IMAGE}
 
