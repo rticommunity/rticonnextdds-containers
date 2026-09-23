@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -e
+
+if [ -z "${CONNEXTDDS_ARCH:-}" ]; then
+    case "$(uname -m)" in
+        x86_64) CONNEXTDDS_ARCH=x64Linux4gcc8.5.0 ;;
+        aarch64|arm64) CONNEXTDDS_ARCH=armv8Linux4gcc8.5.0 ;;
+        *)
+            printf 'Unsupported container architecture: %s\n' "$(uname -m)" >&2
+            exit 2
+            ;;
+    esac
+    export CONNEXTDDS_ARCH
+fi
+
+# Use Connext's own environment setup so all bundled third-party libraries
+# (OpenSSL, curl, protobuf, etc.) are available, not just the core libraries.
+rtisetenv="${NDDSHOME}/resource/scripts/rtisetenv_${CONNEXTDDS_ARCH}.bash"
+if [ -r "${rtisetenv}" ]; then
+    # The ARM rtisetenv script probes Java with set -e enabled. Non-Java
+    # Runtime variants do not install Java, so give that probe a harmless
+    # sentinel while retaining the official library-path setup.
+    if [ "${CONNEXTDDS_ARCH}" = "armv8Linux4gcc8.5.0" ] \
+        && ! command -v java >/dev/null 2>&1 \
+        && [ -z "${JREHOME:-}" ]; then
+        export JREHOME=/nonexistent
+    fi
+    export RTI_ENV_SET=1
+    # shellcheck disable=SC1090
+    . "${rtisetenv}"
+else
+    export LD_LIBRARY_PATH="${NDDSHOME}/lib/${CONNEXTDDS_ARCH}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+fi
+
+if command -v rtienv >/dev/null 2>&1; then
+    if [ -n "${RTI_LICENSE_FILE:-}" ] && [ -f "${RTI_LICENSE_FILE}" ]; then
+        eval "$(rtienv -l "${RTI_LICENSE_FILE}")"
+    else
+        eval "$(rtienv)"
+    fi
+fi
+
+if [ "$#" -eq 0 ]; then
+    set -- bash
+fi
+
+exec "$@"

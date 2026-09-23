@@ -1,0 +1,11 @@
+.git
+.gitignore
+reference/
+.ci-venv/
+**/.DS_Store
+**/__pycache__/
+**/*.pyc
+**/rti_license.dat
+reports/
+.env
+.env.*

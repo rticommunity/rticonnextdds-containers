@@ -1,0 +1,13 @@
+reference/
+.ci-venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+rti_license.dat
+reports/
+.codex-build/
+.codex-finalizer/
+outputs/
+.env
+.env.*
+password.txt
