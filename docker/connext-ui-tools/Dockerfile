@@ -1,4 +1,7 @@
 # syntax=docker/dockerfile:1.7
+# RTI Supplemental License:
+# https://github.com/rticommunity/rticonnextdds-containers/blob/main/doc/connext-ui-tools/README.md#rti-supplemental-license
+
 ARG UI_BASE_IMAGE=hectorm/xubuntu@sha256:635fe60c65aa35fc8330d886cc06754bda924f3c799754d90eb5e1d99e3319e9
 ARG CONNEXT_BASE_IMAGE=rticom/connext-base:7.7.0
 

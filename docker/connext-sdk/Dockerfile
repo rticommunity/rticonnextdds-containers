@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1.7
+# RTI Supplemental License:
+# https://github.com/rticommunity/rticonnextdds-containers/blob/main/doc/connext-sdk/README.md#rti-supplemental-license
 
 ARG BASE_IMAGE=rticom/connext-base:7.7.0
 FROM --platform=${TARGETPLATFORM} ${BASE_IMAGE}
